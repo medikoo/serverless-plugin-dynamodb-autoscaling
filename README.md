@@ -10,9 +10,11 @@ Plugin searches for DynamoDB table resources within generated CloudFormation sta
 
 ### Installation
 
-	$ npm install serverless-plugin-dynamodb-autoscaling
+```bash
+npm install serverless-plugin-dynamodb-autoscaling
+```
 
-### Configuration (within `serverless.yml`)
+### Configuration
 
 Activate plugin in `serverless.yml`
 
@@ -75,7 +77,7 @@ custom:
     tableName1: true
 ```
 
-The configurable settings:
+Configurable settings:
 
 - `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
 - `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
@@ -83,7 +85,9 @@ The configurable settings:
 
 ### Tests
 
-  $ npm test
+```bash
+npm test
+```
 
 [circleci-image]: https://img.shields.io/circleci/project/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
 [circleci-url]: https://circleci.com/gh/medikoo/serverless-plugin-dynamodb-autoscaling
