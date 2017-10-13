@@ -85,8 +85,6 @@ The configurable settings:
 
 	$ npm test
 
-Project cross-browser compatibility supported by:
-
 [circleci-image]: https://img.shields.io/circleci/project/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
 [circleci-url]: https://circleci.com/gh/medikoo/serverless-plugin-dynamodb-autoscaling
 [appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/serverless-plugin-dynamodb-autoscaling.svg
