@@ -6,11 +6,11 @@
 ## Automatic autoscaling configuration for DynamoDB tables
 ### Plugin for Serverless v1
 
-Plugin searches for DynamoDB table resources within generated CloudFormation stack and adds eventual autoscaling resources.
+Plugin searches for DynamoDB table resources within generated CloudFormation stack and adds to it eventual autoscaling resources configuration.
 
 ### Installation
 
-	$ npm install serverless-plugin-transpiler
+	$ npm install serverless-plugin-dynamodb-autoscaling
 
 ### Configuration (within `serverless.yml`)
 
@@ -21,7 +21,7 @@ plugins:
   - serverless-plugin-dynamodb-autoscaling
 ```
 
-By default autoscaling configuration is automatically applied to all preconfigured DynamoDB tables and all its eventual global secondary indexes.
+__By default autoscaling configuration is automatically applied to all preconfigured DynamoDB tables and all its eventual global secondary indexes.__
 
 We can exclude individual tables or tweak their configuration via configuration within`serverless.yml` config:
 
@@ -67,8 +67,10 @@ If you prefer _white list_ instead of _black list_ approach you can handle confi
 ```yaml
 custom:
   dynamodbAutoscaling:
+
     # Disable autoscaling for all
     "*": false
+
     # but enable for tableName1
     tableName1: true
 ```
