@@ -73,6 +73,15 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	);
 
 	templateMock.Resources = Object.assign({}, tableIndexes);
+	configMock.dynamodbAutoscaling = { "*": null };
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		"Apply defaults on *: null setting"
+	);
+
+	templateMock.Resources = Object.assign({}, tableIndexes);
 	configMock.dynamodbAutoscaling = { "*": { minCapacity: 100 } };
 	plugin.configure();
 	t.deepEqual(
