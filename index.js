@@ -47,7 +47,11 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		return pluginConfig;
 	}
 	configure() {
-		Object.assign(this.resources, this.autoscalingResources);
+		const { autoscalingResources } = this;
+		if (!isEmpty(autoscalingResources)) {
+			this.resources[this.iamRoleResourceName] = this.configureIamRole();
+		}
+		Object.assign(this.resources, autoscalingResources);
 	}
 
 	// Configuration resolution
@@ -137,9 +141,6 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 				);
 			}
 		}
-		if (!isEmpty(autoscalingResources)) {
-			autoscalingResources.DynamodbAutoscalingRole = scalingRoleResource;
-		}
 		return autoscalingResources;
 	}
 
@@ -198,7 +199,7 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 					MaxCapacity: config.maxCapacity,
 					MinCapacity: config.minCapacity,
 					ResourceId: { "Fn::Join": ["/", resourceAddress] },
-					RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
+					RoleARN: { "Fn::GetAtt": `${ this.iamRoleResourceName }.Arn` },
 					ScalableDimension: `dynamodb:${ indexName
 						? "index"
 						: "table" }:${ modeCapitalized }CapacityUnits`,
@@ -225,5 +226,75 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		};
 		this.lastPolicyResourceName = policyResourceName;
 		return resources;
+	}
+
+	// IAM Role customization
+	get iamRoleResourceName() {
+		return this.resources.IamRoleLambdaExecution
+			? "IamRoleLambdaExecution"
+			: "DynamodbAutoscalingRole";
+	}
+	get iamRoleResource() {
+		return (
+			this.resources[this.iamRoleResourceName] ||
+			(this.resources[this.iamRoleResourceName] = {
+				Type: "AWS::IAM::Role",
+				Properties: {
+					AssumeRolePolicyDocument: { Version: "2012-10-17", Statement: [] },
+					Path: "/",
+					Policies: [
+						{
+							PolicyName: "root",
+							PolicyDocument: { Version: "2012-10-17", Statement: [] }
+						}
+					]
+				}
+			})
+		);
+	}
+	get iamRoleResourceDynamodbAction() {
+		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
+		let dynamodbStatement = statements.find(statement => {
+			if (statement.Action.some(action => action === "dynamodb:*")) return true;
+			return (
+				statement.Action.some(action => action === "dynamodb:DescribeTable") &&
+				statement.Action.some(action => action === "dynamodb:UpdateTable")
+			);
+		});
+		if (!dynamodbStatement) {
+			statements.push(
+				dynamodbStatement = {
+					Effect: "Allow",
+					Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
+					Resource: "*"
+				}
+			);
+		}
+
+		return dynamodbStatement.Action;
+	}
+	configureIamRole() {
+		this.configureIamRolePolicyDocument();
+		this.configureIamRolePolicies();
+		return this.iamRoleResource;
+	}
+	configureIamRolePolicyDocument() {
+		const statements = this.iamRoleResource.Properties.AssumeRolePolicyDocument.Statement;
+		if (
+			statements.find(statement =>
+				statement.Principal.Service.includes("application-autoscaling.amazonaws.com"))
+		) {
+			return;
+		}
+		statements.push({
+			Effect: "Allow",
+			Principal: { Service: ["application-autoscaling.amazonaws.com"] },
+			Action: ["sts:AssumeRole"]
+		});
+	}
+	configureIamRolePolicies() {
+		const action = this.iamRoleResourceDynamodbAction;
+		if (!action.includes("cloudwatch:*")) action.push("cloudwatch:*");
+		if (!action.includes("autoscaling:*")) action.push("autoscaling:*");
 	}
 };

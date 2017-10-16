@@ -3,15 +3,20 @@
 const test   = require("tape")
     , Plugin = require("../");
 
-const roleResource              = require("./__snapshots__/role-resource")
-    , tableNoIndexes            = require("./__snapshots__/table-no-indexes")
-    , tableIndexes              = require("./__snapshots__/table-indexes")
-    , resourcesNoIndexes        = require("./__snapshots__/resources-no-indexes-default")
-    , resourcesIndexes          = require("./__snapshots__/resources-indexes-default")
-    , resourcesIndexesNoIndexes = require("./__snapshots__/resources-indexes-no-indexes")
-    , resourcesIndexesNoTable   = require("./__snapshots__/resources-indexes-no-table")
-    , resourcesIndexesCustom    = require("./__snapshots__/resources-indexes-custom")
-    , resourcesIndexesCustom2   = require("./__snapshots__/resources-indexes-custom-2");
+const roleResource                = require("./__snapshots__/role-resource")
+    , lambdaRoleResourceBare      = require("./__snapshots__/lambda-role-resource-bare")
+    , lambdaRoleResourcePatched   = require("./__snapshots__/lambda-role-resource-patched")
+    , lambdaRoleResourceBare2     = require("./__snapshots__/lambda-role-resource-bare-2")
+    , lambdaRoleResourcePatched2  = require("./__snapshots__/lambda-role-resource-patched-2")
+    , tableNoIndexes              = require("./__snapshots__/table-no-indexes")
+    , tableIndexes                = require("./__snapshots__/table-indexes")
+    , resourcesNoIndexes          = require("./__snapshots__/resources-no-indexes-default")
+    , resourcesNoIndexesLambdaIam = require("./__snapshots__/resources-no-indexes-lambda-iam")
+    , resourcesIndexes            = require("./__snapshots__/resources-indexes-default")
+    , resourcesIndexesNoIndexes   = require("./__snapshots__/resources-indexes-no-indexes")
+    , resourcesIndexesNoTable     = require("./__snapshots__/resources-indexes-no-table")
+    , resourcesIndexesCustom      = require("./__snapshots__/resources-indexes-custom")
+    , resourcesIndexesCustom2     = require("./__snapshots__/resources-indexes-custom-2");
 
 test("Serverless Plugin Dynamodb Autoscaling", t => {
 	const templateMock = {}, configMock = {};
@@ -147,13 +152,31 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		"Does not autoscale table with table: false"
 	);
 
-	templateMock.Resources = Object.assign({}, tableNoIndexes);
+	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare);
+	delete configMock.dynamodbAutoscaling;
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, lambdaRoleResourcePatched, tableNoIndexes, resourcesNoIndexesLambdaIam),
+		"Automatically adds settings to lambda IAM role"
+	);
+
+	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare);
 	configMock.dynamodbAutoscaling = { miszka: { table: false } };
 	plugin.configure();
 	t.deepEqual(
 		templateMock.Resources,
-		Object.assign({}, roleResource, tableNoIndexes, resourcesNoIndexes),
+		Object.assign({}, lambdaRoleResourcePatched, tableNoIndexes, resourcesNoIndexesLambdaIam),
 		"Does not apply not addressed patterns"
+	);
+
+	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare2);
+	delete configMock.dynamodbAutoscaling;
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, lambdaRoleResourcePatched2, tableNoIndexes, resourcesNoIndexesLambdaIam),
+		"Automatically adds settings to lambda IAM role with no Dynamodb rights"
 	);
 
 	templateMock.Resources = {};

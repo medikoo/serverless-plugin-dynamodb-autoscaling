@@ -1,0 +1,189 @@
+{
+  "IamRoleLambdaExecution": {
+    "Type": "AWS::IAM::Role",
+    "Properties": {
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "lambda.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "application-autoscaling.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        ]
+      },
+      "Policies": [
+        {
+          "PolicyName": {
+            "Fn::Join": [
+              "-",
+              [
+                "dev",
+                "maas-tsp",
+                "lambda"
+              ]
+            ]
+          },
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "logs:CreateLogStream"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-citybikes:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-enterprise:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-gett:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-hsl:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-htd:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-nextbike:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-nx:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-sixt:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-tcataxi:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-valopilkku:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-enterprise-update-stations-data:*"
+                  }
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "logs:PutLogEvents"
+                ],
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-citybikes:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-enterprise:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-gett:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-hsl:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-htd:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-nextbike:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-nx:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-sixt:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-tcataxi:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-booking-valopilkku:*:*"
+                  },
+                  {
+                    "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/maas-tsp-dev-enterprise-update-stations-data:*:*"
+                  }
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:DescribeTable"
+                ],
+                "Resource": [
+                  "arn:aws:dynamodb:eu-west-1:*:table/maas-tsp-dev-*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cloudformation:DescribeStackResource"
+                ],
+                "Resource": [
+                  "arn:aws:cloudformation:eu-west-1:*:stack/maas-tsp-dev/*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:GetObject",
+                  "s3:PutObject"
+                ],
+                "Resource": [
+                  "arn:aws:s3:::maas-tsp-dev-serverlessdeploymentbucket-*"
+                ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:DescribeTable",
+                  "dynamodb:UpdateTable",
+                  "cloudwatch:*",
+                  "autoscaling:*"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        }
+      ],
+      "Path": "/",
+      "RoleName": {
+        "Fn::Join": [
+          "-",
+          [
+            "maas-tsp",
+            "dev",
+            "eu-west-1",
+            "lambdaRole"
+          ]
+        ]
+      },
+      "ManagedPolicyArns": [
+        "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+      ]
+    },
+    "DependsOn": []
+  }
+}

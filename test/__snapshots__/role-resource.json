@@ -30,11 +30,7 @@
                 "Action": [
                   "dynamodb:DescribeTable",
                   "dynamodb:UpdateTable",
-                  "cloudwatch:PutMetricAlarm",
-                  "cloudwatch:DescribeAlarms",
-                  "cloudwatch:GetMetricStatistics",
-                  "cloudwatch:SetAlarmState",
-                  "cloudwatch:DeleteAlarms",
+                  "cloudwatch:*",
                   "autoscaling:*"
                 ],
                 "Resource": "*"
