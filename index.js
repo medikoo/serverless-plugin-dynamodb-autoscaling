@@ -87,7 +87,7 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		return pluginConfig;
 	}
 	configure() {
-		Object.assign(this.resources, this.generateResources());
+		Object.assign(this.resources, this.autoscalingResources);
 	}
 
 	// Configuration resolution
@@ -166,19 +166,21 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 	}
 
 	// Autoscaling resources generation
-	generateResources() {
-		const addonResources = {};
+	get autoscalingResources() {
+		const autoscalingResources = {};
 		delete this.lastPolicyResourceName;
 		for (const tableConfig of this.config) {
 			if (tableConfig.config) {
 				Object.assign(
-					addonResources,
+					autoscalingResources,
 					this.generateTableResources(tableConfig.resource, tableConfig.config)
 				);
 			}
 		}
-		if (!isEmpty(addonResources)) addonResources.DynamodbAutoscalingRole = scalingRoleResource;
-		return addonResources;
+		if (!isEmpty(autoscalingResources)) {
+			autoscalingResources.DynamodbAutoscalingRole = scalingRoleResource;
+		}
+		return autoscalingResources;
 	}
 
 	generateTableResources(resource, config) {
