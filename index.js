@@ -11,12 +11,11 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		};
 	}
 	configure() {
-		const resources = this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
+		this.resources = this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
+		this.userConfig = this.serverless.service.custom.dynamodbAutoscaling;
 		Object.assign(
-			resources,
-			generateResources(
-				resolveConfig(resources, this.serverless.service.custom.dynamodbAutoscaling)
-			)
+			this.resources,
+			generateResources(resolveConfig(this.resources, this.userConfig))
 		);
 	}
 };
