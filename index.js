@@ -1,18 +1,17 @@
 "use strict";
 
-const compact             = require("es5-ext/array/#/compact")
-    , assignDeep          = require("es5-ext/object/assign-deep")
-    , copyDeep            = require("es5-ext/object/copy-deep")
-    , isEmpty             = require("es5-ext/object/is-empty")
-    , isValue             = require("es5-ext/object/is-value")
-    , isObject            = require("es5-ext/object/is-object")
-    , objToArray          = require("es5-ext/object/to-array")
-    , objForEach          = require("es5-ext/object/for-each")
-    , objMap              = require("es5-ext/object/map")
-    , capitalize          = require("es5-ext/string/#/capitalize")
-    , hyphenToCamel       = require("es5-ext/string/#/hyphen-to-camel")
-    , minimatch           = require("minimatch")
-    , scalingRoleResource = require("./lib/scaling-role-resource");
+const compact       = require("es5-ext/array/#/compact")
+    , assignDeep    = require("es5-ext/object/assign-deep")
+    , copyDeep      = require("es5-ext/object/copy-deep")
+    , isEmpty       = require("es5-ext/object/is-empty")
+    , isValue       = require("es5-ext/object/is-value")
+    , isObject      = require("es5-ext/object/is-object")
+    , objToArray    = require("es5-ext/object/to-array")
+    , objForEach    = require("es5-ext/object/for-each")
+    , objMap        = require("es5-ext/object/map")
+    , capitalize    = require("es5-ext/string/#/capitalize")
+    , hyphenToCamel = require("es5-ext/string/#/hyphen-to-camel")
+    , minimatch     = require("minimatch");
 
 const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75 }
     , entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
@@ -240,7 +239,18 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 			(this.resources[this.iamRoleResourceName] = {
 				Type: "AWS::IAM::Role",
 				Properties: {
-					AssumeRolePolicyDocument: { Version: "2012-10-17", Statement: [] },
+					AssumeRolePolicyDocument: {
+						Version: "2012-10-17",
+						Statement: [
+							{
+								Effect: "Allow",
+								Principal: {
+									Service: []
+								},
+								Action: ["sts:AssumeRole"]
+							}
+						]
+					},
 					Path: "/",
 					Policies: [
 						{
@@ -279,18 +289,10 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		return this.iamRoleResource;
 	}
 	configureIamRolePolicyDocument() {
-		const statements = this.iamRoleResource.Properties.AssumeRolePolicyDocument.Statement;
-		if (
-			statements.find(statement =>
-				statement.Principal.Service.includes("application-autoscaling.amazonaws.com"))
-		) {
-			return;
-		}
-		statements.push({
-			Effect: "Allow",
-			Principal: { Service: ["application-autoscaling.amazonaws.com"] },
-			Action: ["sts:AssumeRole"]
-		});
+		const services = this.iamRoleResource.Properties.AssumeRolePolicyDocument.Statement[0]
+			.Principal.Service;
+		if (services.includes("application-autoscaling.amazonaws.com")) return;
+		services.push("application-autoscaling.amazonaws.com");
 	}
 	configureIamRolePolicies() {
 		const action = this.iamRoleResourceDynamodbAction;
