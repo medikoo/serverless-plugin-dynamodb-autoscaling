@@ -1,17 +1,18 @@
 "use strict";
 
-const compact       = require("es5-ext/array/#/compact")
-    , assignDeep    = require("es5-ext/object/assign-deep")
-    , copyDeep      = require("es5-ext/object/copy-deep")
-    , isEmpty       = require("es5-ext/object/is-empty")
-    , isValue       = require("es5-ext/object/is-value")
-    , isObject      = require("es5-ext/object/is-object")
-    , objToArray    = require("es5-ext/object/to-array")
-    , objForEach    = require("es5-ext/object/for-each")
-    , objMap        = require("es5-ext/object/map")
-    , capitalize    = require("es5-ext/string/#/capitalize")
-    , hyphenToCamel = require("es5-ext/string/#/hyphen-to-camel")
-    , minimatch     = require("minimatch");
+const compact             = require("es5-ext/array/#/compact")
+    , assignDeep          = require("es5-ext/object/assign-deep")
+    , copyDeep            = require("es5-ext/object/copy-deep")
+    , isEmpty             = require("es5-ext/object/is-empty")
+    , isValue             = require("es5-ext/object/is-value")
+    , isObject            = require("es5-ext/object/is-object")
+    , objToArray          = require("es5-ext/object/to-array")
+    , objForEach          = require("es5-ext/object/for-each")
+    , objMap              = require("es5-ext/object/map")
+    , capitalize          = require("es5-ext/string/#/capitalize")
+    , hyphenToCamel       = require("es5-ext/string/#/hyphen-to-camel")
+    , minimatch           = require("minimatch")
+    , scalingRoleResource = require("./lib/scaling-role-resource");
 
 const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75 }
     , entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
@@ -24,47 +25,6 @@ const entitySettingNames = new Set(
 
 const resolveIndexToken = indexName =>
 	indexName ? capitalize.call(hyphenToCamel.call(indexName).replace(/[^a-zA-Z0-9]/g, "")) : "";
-
-const scalingRoleResource = {
-	Type: "AWS::IAM::Role",
-	Properties: {
-		AssumeRolePolicyDocument: {
-			Version: "2012-10-17",
-			Statement: [
-				{
-					Effect: "Allow",
-					Principal: { Service: ["application-autoscaling.amazonaws.com"] },
-					Action: ["sts:AssumeRole"]
-				}
-			]
-		},
-		Path: "/",
-		Policies: [
-			{
-				PolicyName: "root",
-				PolicyDocument: {
-					Version: "2012-10-17",
-					Statement: [
-						{
-							Effect: "Allow",
-							Action: [
-								"dynamodb:DescribeTable",
-								"dynamodb:UpdateTable",
-								"cloudwatch:PutMetricAlarm",
-								"cloudwatch:DescribeAlarms",
-								"cloudwatch:GetMetricStatistics",
-								"cloudwatch:SetAlarmState",
-								"cloudwatch:DeleteAlarms",
-								"autoscaling:*"
-							],
-							Resource: "*"
-						}
-					]
-				}
-			}
-		]
-	}
-};
 
 module.exports = class ServerlessPluginDynamodbAutoscaling {
 	constructor(serverless) {
