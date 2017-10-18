@@ -119,12 +119,18 @@
               {
                 "Effect": "Allow",
                 "Action": [
-                  "dynamodb:*",
-                  "cloudwatch:*"
+                  "dynamodb:*"
                 ],
                 "Resource": [
                   "arn:aws:dynamodb:eu-west-1:*:table/maas-tsp-dev-*"
                 ]
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cloudwatch:*"
+                ],
+                "Resource": "*"
               },
               {
                 "Effect": "Allow",

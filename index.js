@@ -181,6 +181,39 @@ class ServerlessPluginDynamodbAutoscaling {
 	}
 
 	// IAM Role customization
+	configureIamRoleResourceDynamodbAction() {
+		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
+		let dynamodbStatement = statements.find(statement => {
+			if (statement.Action.some(action => action === "dynamodb:*")) return true;
+			return (
+				statement.Action.some(action => action === "dynamodb:DescribeTable") &&
+				statement.Action.some(action => action === "dynamodb:UpdateTable")
+			);
+		});
+		if (!dynamodbStatement) {
+			statements.push(
+				dynamodbStatement = {
+					Effect: "Allow",
+					Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
+					Resource: "arn:aws:dynamodb:*"
+				}
+			);
+		}
+	}
+	configureIamRoleResourceCloudwatchAction() {
+		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
+		let cloudwatchStatement = statements.find(statement =>
+			statement.Action.some(action => action === "cloudwatch:*"));
+		if (!cloudwatchStatement) {
+			statements.push(
+				cloudwatchStatement = {
+					Effect: "Allow",
+					Action: ["cloudwatch:*"],
+					Resource: "*"
+				}
+			);
+		}
+	}
 	configureIamRole() {
 		this.configureIamRolePolicyDocument();
 		this.configureIamRolePolicies();
@@ -193,8 +226,8 @@ class ServerlessPluginDynamodbAutoscaling {
 		services.push("application-autoscaling.amazonaws.com");
 	}
 	configureIamRolePolicies() {
-		const action = this.iamRoleResourceDynamodbAction;
-		if (!action.includes("cloudwatch:*")) action.push("cloudwatch:*");
+		this.configureIamRoleResourceDynamodbAction();
+		this.configureIamRoleResourceCloudwatchAction();
 	}
 }
 
@@ -292,27 +325,6 @@ Object.defineProperties(
 					}
 				})
 			);
-		}),
-		iamRoleResourceDynamodbAction: d(function () {
-			const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
-			let dynamodbStatement = statements.find(statement => {
-				if (statement.Action.some(action => action === "dynamodb:*")) return true;
-				return (
-					statement.Action.some(action => action === "dynamodb:DescribeTable") &&
-					statement.Action.some(action => action === "dynamodb:UpdateTable")
-				);
-			});
-			if (!dynamodbStatement) {
-				statements.push(
-					dynamodbStatement = {
-						Effect: "Allow",
-						Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
-						Resource: "arn:aws:dynamodb:*"
-					}
-				);
-			}
-
-			return dynamodbStatement.Action;
 		})
 	})
 );

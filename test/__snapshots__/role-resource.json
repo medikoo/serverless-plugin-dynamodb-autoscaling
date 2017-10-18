@@ -29,10 +29,16 @@
                 "Effect": "Allow",
                 "Action": [
                   "dynamodb:DescribeTable",
-                  "dynamodb:UpdateTable",
-                  "cloudwatch:*"
+                  "dynamodb:UpdateTable"
                 ],
                 "Resource": "arn:aws:dynamodb:*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cloudwatch:*"
+                ],
+                "Resource": "*"
               }
             ]
           }
