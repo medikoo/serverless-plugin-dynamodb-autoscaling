@@ -152,7 +152,7 @@
                   "cloudwatch:*",
                   "autoscaling:*"
                 ],
-                "Resource": "*"
+                "Resource": "arn:aws:dynamodb:*"
               }
             ]
           }

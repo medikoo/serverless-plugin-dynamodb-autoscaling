@@ -276,7 +276,7 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 				dynamodbStatement = {
 					Effect: "Allow",
 					Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
-					Resource: "*"
+					Resource: "arn:aws:dynamodb:*"
 				}
 			);
 		}
