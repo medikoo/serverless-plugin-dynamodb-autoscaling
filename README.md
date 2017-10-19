@@ -3,10 +3,10 @@
 [![Tests coverage][codecov-image]][codecov-url]
 
 # serverless-plugin-dynamodb-autoscaling
-## Automatic autoscaling configuration for DynamoDB tables
-### Plugin for Serverless v1
+## Autoscaling configuration for DynamoDB tables of Serverless project
 
-Plugin searches for DynamoDB table resources within generated CloudFormation stack and adds to it eventual autoscaling resources configuration.
+- __Convention over configuration__ approach - automatically discovers configured tables and adds scaling resources. Still it's possible to [fine tune](#tables-configuration) settings per specific tables or indexes, or switch completely to [white list apprach](#white-list-approach)
+- __Resources savvy__ - if possible exiting IAM role is reused for scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` that are added to cloudformation stack
 
 ### Installation
 
