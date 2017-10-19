@@ -20,6 +20,7 @@
     "minimatch": "^3.0.4"
   },
   "devDependencies": {
+    "d": "1",
     "eslint": "^4.7.2",
     "eslint-config-medikoo": "^1.26",
     "istanbul": "^0.4.5",

@@ -11,6 +11,8 @@ const compact       = require("es5-ext/array/#/compact")
     , objMap        = require("es5-ext/object/map")
     , capitalize    = require("es5-ext/string/#/capitalize")
     , hyphenToCamel = require("es5-ext/string/#/hyphen-to-camel")
+    , d             = require("d")
+    , lazy          = require("d/lazy")
     , minimatch     = require("minimatch");
 
 const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75 }
@@ -25,25 +27,12 @@ const entitySettingNames = new Set(
 const resolveIndexToken = indexName =>
 	indexName ? capitalize.call(hyphenToCamel.call(indexName).replace(/[^a-zA-Z0-9]/g, "")) : "";
 
-module.exports = class ServerlessPluginDynamodbAutoscaling {
+class ServerlessPluginDynamodbAutoscaling {
 	constructor(serverless) {
 		this.serverless = serverless;
 		this.hooks = {
 			"after:aws:package:finalize:mergeCustomProviderResources": this.configure.bind(this)
 		};
-	}
-	get resources() {
-		return this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
-	}
-	get pluginConfig() {
-		const pluginConfig = this.serverless.service.custom.dynamodbAutoscaling;
-		if (!isValue(pluginConfig)) return {};
-		if (!isObject(pluginConfig)) {
-			throw new Error(
-				"Invalid 'dynamodbAutoscaling' configuration in serverless.yml. Expected an object"
-			);
-		}
-		return pluginConfig;
 	}
 	configure() {
 		const { autoscalingResources } = this;
@@ -54,29 +43,6 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 	}
 
 	// Configuration resolution
-	get config() {
-		const resolvedPluginConfig = objMap(this.pluginConfig, config =>
-			this.resolveTableConfig(config));
-		return Object.keys(this.resources)
-			.map(resourceName => {
-				const resource = this.resources[resourceName];
-				if (resource.Type !== "AWS::DynamoDB::Table") return null;
-				const configList = compact.call(
-					objToArray(
-						resolvedPluginConfig,
-						(config, pattern) =>
-							minimatch(resource.Properties.TableName, pattern)
-								? copyDeep(config)
-								: null
-					)
-				);
-				return {
-					resource: { name: resourceName, value: resource },
-					config: assignDeep({}, copyDeep(tableDefaults), ...configList)
-				};
-			})
-			.filter(Boolean);
-	}
 	resolveTableConfig(config) {
 		if (!isValue(config)) return tableDefaults;
 		if (!config) return false;
@@ -129,20 +95,6 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 	}
 
 	// Autoscaling resources generation
-	get autoscalingResources() {
-		const autoscalingResources = {};
-		delete this.lastPolicyResourceName;
-		for (const tableConfig of this.config) {
-			if (tableConfig.config) {
-				Object.assign(
-					autoscalingResources,
-					this.generateTableResources(tableConfig.resource, tableConfig.config)
-				);
-			}
-		}
-		return autoscalingResources;
-	}
-
 	generateTableResources(resource, config) {
 		const resources = {};
 		if (config.table) {
@@ -228,61 +180,6 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 	}
 
 	// IAM Role customization
-	get iamRoleResourceName() {
-		return this.resources.IamRoleLambdaExecution
-			? "IamRoleLambdaExecution"
-			: "DynamodbAutoscalingRole";
-	}
-	get iamRoleResource() {
-		return (
-			this.resources[this.iamRoleResourceName] ||
-			(this.resources[this.iamRoleResourceName] = {
-				Type: "AWS::IAM::Role",
-				Properties: {
-					AssumeRolePolicyDocument: {
-						Version: "2012-10-17",
-						Statement: [
-							{
-								Effect: "Allow",
-								Principal: {
-									Service: []
-								},
-								Action: ["sts:AssumeRole"]
-							}
-						]
-					},
-					Path: "/",
-					Policies: [
-						{
-							PolicyName: "root",
-							PolicyDocument: { Version: "2012-10-17", Statement: [] }
-						}
-					]
-				}
-			})
-		);
-	}
-	get iamRoleResourceDynamodbAction() {
-		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
-		let dynamodbStatement = statements.find(statement => {
-			if (statement.Action.some(action => action === "dynamodb:*")) return true;
-			return (
-				statement.Action.some(action => action === "dynamodb:DescribeTable") &&
-				statement.Action.some(action => action === "dynamodb:UpdateTable")
-			);
-		});
-		if (!dynamodbStatement) {
-			statements.push(
-				dynamodbStatement = {
-					Effect: "Allow",
-					Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
-					Resource: "arn:aws:dynamodb:*"
-				}
-			);
-		}
-
-		return dynamodbStatement.Action;
-	}
 	configureIamRole() {
 		this.configureIamRolePolicyDocument();
 		this.configureIamRolePolicies();
@@ -299,4 +196,116 @@ module.exports = class ServerlessPluginDynamodbAutoscaling {
 		if (!action.includes("cloudwatch:*")) action.push("cloudwatch:*");
 		if (!action.includes("autoscaling:*")) action.push("autoscaling:*");
 	}
-};
+}
+
+Object.defineProperties(
+	ServerlessPluginDynamodbAutoscaling.prototype,
+	lazy({
+		resources: d(function () {
+			return this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
+		}),
+		pluginConfig: d(function () {
+			const pluginConfig = this.serverless.service.custom.dynamodbAutoscaling;
+			if (!isValue(pluginConfig)) return {};
+			if (!isObject(pluginConfig)) {
+				throw new Error(
+					"Invalid 'dynamodbAutoscaling' configuration in serverless.yml. " +
+						"Expected an object"
+				);
+			}
+			return pluginConfig;
+		}),
+		config: d(function () {
+			const resolvedPluginConfig = objMap(this.pluginConfig, config =>
+				this.resolveTableConfig(config));
+			return Object.keys(this.resources)
+				.map(resourceName => {
+					const resource = this.resources[resourceName];
+					if (resource.Type !== "AWS::DynamoDB::Table") return null;
+					const configList = compact.call(
+						objToArray(
+							resolvedPluginConfig,
+							(config, pattern) =>
+								minimatch(resource.Properties.TableName, pattern)
+									? copyDeep(config)
+									: null
+						)
+					);
+					return {
+						resource: { name: resourceName, value: resource },
+						config: assignDeep({}, copyDeep(tableDefaults), ...configList)
+					};
+				})
+				.filter(Boolean);
+		}),
+		autoscalingResources: d(function () {
+			const autoscalingResources = {};
+			for (const tableConfig of this.config) {
+				if (tableConfig.config) {
+					Object.assign(
+						autoscalingResources,
+						this.generateTableResources(tableConfig.resource, tableConfig.config)
+					);
+				}
+			}
+			return autoscalingResources;
+		}),
+		iamRoleResourceName: d(function () {
+			return this.resources.IamRoleLambdaExecution
+				? "IamRoleLambdaExecution"
+				: "DynamodbAutoscalingRole";
+		}),
+		iamRoleResource: d(function () {
+			return (
+				this.resources[this.iamRoleResourceName] ||
+				(this.resources[this.iamRoleResourceName] = {
+					Type: "AWS::IAM::Role",
+					Properties: {
+						AssumeRolePolicyDocument: {
+							Version: "2012-10-17",
+							Statement: [
+								{
+									Effect: "Allow",
+									Principal: {
+										Service: []
+									},
+									Action: ["sts:AssumeRole"]
+								}
+							]
+						},
+						Path: "/",
+						Policies: [
+							{
+								PolicyName: "root",
+								PolicyDocument: { Version: "2012-10-17", Statement: [] }
+							}
+						]
+					}
+				})
+			);
+		}),
+		iamRoleResourceDynamodbAction: d(function () {
+			const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
+			let dynamodbStatement = statements.find(statement => {
+				if (statement.Action.some(action => action === "dynamodb:*")) return true;
+				return (
+					statement.Action.some(action => action === "dynamodb:DescribeTable") &&
+					statement.Action.some(action => action === "dynamodb:UpdateTable")
+				);
+			});
+			if (!dynamodbStatement) {
+				statements.push(
+					dynamodbStatement = {
+						Effect: "Allow",
+						Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
+						Resource: "arn:aws:dynamodb:*"
+					}
+				);
+			}
+
+			return dynamodbStatement.Action;
+		})
+	})
+);
+
+module.exports = ServerlessPluginDynamodbAutoscaling;
