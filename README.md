@@ -5,8 +5,8 @@
 # serverless-plugin-dynamodb-autoscaling
 ## Autoscaling configuration for DynamoDB tables of Serverless project
 
-- __Convention over configuration__ approach - automatically discovers configured tables and adds scaling resources. Still it's possible to [fine tune](#tables-configuration) settings per specific tables or indexes, or switch completely to [white list apprach](#white-list-approach)
-- __Resources savvy__ - if possible exiting IAM role is reused for scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` that are added to cloudformation stack
+- __Convention over configuration approach__ - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched completely to [white list approach](#white-list-approach)
+- __Resources savvy__ - Exiting project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
 
 ### Installation
 
@@ -25,14 +25,13 @@ plugins:
 
 #### Eventual IAM policy update race condition issue
 
-If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue,described as following by AWS team:
+If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue, described as following by AWS team:
 
 _It's a known situation and confirmed by the internal team that manages CloudFormation that the propagation of IAM policies and resources might take longer than CloudFormation to launch the dependent resources. This race condition happens now and then, and unfortunately CloudFormation team is not able to determine programmatically when a role is effectively available in a region._
 
 To workaround it, the stack just with IAM polices update (and no autoscaling resources yet) needs to be deployed first, and then further deployment may carry the autoscaling resources update.
 
-To make handling of that case easier this plugin enables the IAM only deployment via `iamOnly` option.
-Therefore you may refer to this option as one-time mean
+To make handling of that case easier this plugin enables the IAM only deployment via `iamOnly` option, you may refer to this option as one-time mean
 
 ```yaml
 custom:
@@ -40,11 +39,11 @@ custom:
     iamOnly: true
 ```
 
-#### Tables configuration
+### Tables configuration
 
-__By default autoscaling configuration is automatically applied to all preconfigured DynamoDB tables and all its eventual global secondary indexes.__
+By default autoscaling configuration is automatically applied to all preconfigured DynamoDB tables and all its eventual global secondary indexes.
 
-We can exclude individual tables or tweak their configuration via configuration within`serverless.yml` config:
+Still, we can exclude individual tables or tweak their configuration via configuration within`serverless.yml` config:
 
 ```yaml
 custom:
