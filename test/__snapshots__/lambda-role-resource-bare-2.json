@@ -9,7 +9,8 @@
             "Effect": "Allow",
             "Principal": {
               "Service": [
-                "lambda.amazonaws.com"
+                "lambda.amazonaws.com",
+                "application-autoscaling.amazonaws.com"
               ]
             },
             "Action": [

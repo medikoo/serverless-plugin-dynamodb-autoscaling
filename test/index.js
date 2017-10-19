@@ -1,7 +1,8 @@
 "use strict";
 
-const test   = require("tape")
-    , Plugin = require("../");
+const copyDeep = require("es5-ext/object/copy-deep")
+    , test     = require("tape")
+    , Plugin   = require("../");
 
 const roleResource                = require("./__snapshots__/role-resource")
     , lambdaRoleResourceBare      = require("./__snapshots__/lambda-role-resource-bare")
@@ -169,7 +170,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	);
 
 	plugin = new Plugin(serverlessMock);
-	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare);
+	templateMock.Resources = Object.assign({}, tableNoIndexes, copyDeep(lambdaRoleResourceBare));
 	delete configMock.dynamodbAutoscaling;
 	plugin.configure();
 	t.deepEqual(
@@ -179,7 +180,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	);
 
 	plugin = new Plugin(serverlessMock);
-	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare);
+	templateMock.Resources = Object.assign({}, tableNoIndexes, copyDeep(lambdaRoleResourceBare));
 	configMock.dynamodbAutoscaling = { tablesConfig: { miszka: { table: false } } };
 	plugin.configure();
 	t.deepEqual(
@@ -189,7 +190,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	);
 
 	plugin = new Plugin(serverlessMock);
-	templateMock.Resources = Object.assign({}, tableNoIndexes, lambdaRoleResourceBare2);
+	templateMock.Resources = Object.assign({}, tableNoIndexes, copyDeep(lambdaRoleResourceBare2));
 	delete configMock.dynamodbAutoscaling;
 	plugin.configure();
 	t.deepEqual(
