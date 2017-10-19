@@ -205,18 +205,27 @@ Object.defineProperties(
 			return this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
 		}),
 		pluginConfig: d(function () {
-			const pluginConfig = this.serverless.service.custom.dynamodbAutoscaling;
-			if (!isValue(pluginConfig)) return {};
+			let pluginConfig = this.serverless.service.custom.dynamodbAutoscaling;
+			if (!isValue(pluginConfig)) return { tablesConfig: {} };
 			if (!isObject(pluginConfig)) {
 				throw new Error(
 					"Invalid 'dynamodbAutoscaling' configuration in serverless.yml. " +
 						"Expected an object"
 				);
 			}
+			pluginConfig = copyDeep(pluginConfig);
+			if (!isValue(pluginConfig.tablesConfig)) {
+				pluginConfig.tablesConfig = {};
+			} else if (!isObject(pluginConfig.tablesConfig)) {
+				throw new Error(
+					"Invalid 'dynamodbAutoscaling.tablesConfig' configuration in serverless.yml. " +
+						"Expected an object"
+				);
+			}
 			return pluginConfig;
 		}),
-		config: d(function () {
-			const resolvedPluginConfig = objMap(this.pluginConfig, config =>
+		tablesConfig: d(function () {
+			const resolvedPluginConfig = objMap(this.pluginConfig.tablesConfig, config =>
 				this.resolveTableConfig(config));
 			return Object.keys(this.resources)
 				.map(resourceName => {
@@ -240,7 +249,7 @@ Object.defineProperties(
 		}),
 		autoscalingResources: d(function () {
 			const autoscalingResources = {};
-			for (const tableConfig of this.config) {
+			for (const tableConfig of this.tablesConfig) {
 				if (tableConfig.config) {
 					Object.assign(
 						autoscalingResources,

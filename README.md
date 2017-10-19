@@ -30,38 +30,39 @@ We can exclude individual tables or tweak their configuration via configuration 
 ```yaml
 custom:
   dynamodbAutoscaling:
-    # Disable autoscaling for tableName1 table entirely
-    tableName1: false 
+    tablesConfig:
+      # Disable autoscaling for tableName1 table entirely
+      tableName1: false 
 
-    # Disable autoscaling just for indexes of tableName2 table
-    tableName2:
-      indexes: false 
+      # Disable autoscaling just for indexes of tableName2 table
+      tableName2:
+        indexes: false 
 
-    # Tweak minCapacity setting for tableName3 (for both table and indexes)
-    tableName3:
-      minCapacity: 10
+      # Tweak minCapacity setting for tableName3 (for both table and indexes)
+      tableName3:
+        minCapacity: 10
 
-    tableName4:
-      # Tweak maxCapacity setting for tableName4 (just table)
-      table:
-        maxCapacity: 300
-      # Tweak targetUsage setting for tableName4 indexes
-      indexes:
-        targetUsage: 0.5
+      tableName4:
+        # Tweak maxCapacity setting for tableName4 (just table)
+        table:
+          maxCapacity: 300
+        # Tweak targetUsage setting for tableName4 indexes
+        indexes:
+          targetUsage: 0.5
 
-    tableName5:
-      indexes:
-        # Do not autoscale index 'foo'
-        foo: false
+      tableName5:
+        indexes:
+          # Do not autoscale index 'foo'
+          foo: false
 
-    tableName6:
-      indexes:
-        # Do not autoscale any indexes but 'foo' and 'bar'
-        "*": false
-        foo: true
-        bar:
-          # Tweaking one of the configuration option will also whitelist the index
-          minCapacity: 100
+      tableName6:
+        indexes:
+          # Do not autoscale any indexes but 'foo' and 'bar'
+          "*": false
+          foo: true
+          bar:
+            # Tweaking one of the configuration option will also whitelist the index
+            minCapacity: 100
 ```
 
 If you prefer _white list_ instead of _black list_ approach you can handle configuration as below
@@ -69,12 +70,12 @@ If you prefer _white list_ instead of _black list_ approach you can handle confi
 ```yaml
 custom:
   dynamodbAutoscaling:
+    tablesConfig:
+      # Disable autoscaling for all
+      "*": false
 
-    # Disable autoscaling for all
-    "*": false
-
-    # but enable for tableName1
-    tableName1: true
+      # but enable for tableName1
+      tableName1: true
 ```
 
 Configurable settings:
