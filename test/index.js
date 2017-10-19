@@ -60,7 +60,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	plugin.configure();
 	t.deepEqual(
 		templateMock.Resources,
-		Object.assign({}, tableNoIndexes),
+		Object.assign({}, tableNoIndexes, roleResource),
 		"Does not autoscale with read: false and write: false"
 	);
 
@@ -70,7 +70,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	plugin.configure();
 	t.deepEqual(
 		templateMock.Resources,
-		Object.assign({ Foo: {} }, tableIndexes),
+		Object.assign({ Foo: {} }, tableIndexes, roleResource),
 		"Does not autoscale with *: false"
 	);
 

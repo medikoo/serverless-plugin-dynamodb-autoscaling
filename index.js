@@ -3,7 +3,6 @@
 const compact       = require("es5-ext/array/#/compact")
     , assignDeep    = require("es5-ext/object/assign-deep")
     , copyDeep      = require("es5-ext/object/copy-deep")
-    , isEmpty       = require("es5-ext/object/is-empty")
     , isValue       = require("es5-ext/object/is-value")
     , isObject      = require("es5-ext/object/is-object")
     , objToArray    = require("es5-ext/object/to-array")
@@ -35,11 +34,8 @@ class ServerlessPluginDynamodbAutoscaling {
 		};
 	}
 	configure() {
-		const { autoscalingResources } = this;
-		if (!isEmpty(autoscalingResources)) {
-			this.resources[this.iamRoleResourceName] = this.configureIamRole();
-		}
-		Object.assign(this.resources, autoscalingResources);
+		this.resources[this.iamRoleResourceName] = this.configureIamRole();
+		Object.assign(this.resources, this.autoscalingResources);
 	}
 
 	// Configuration resolution
