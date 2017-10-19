@@ -6,7 +6,7 @@
 ## Autoscaling configuration for DynamoDB tables of Serverless project
 
 - __Convention over configuration approach__ - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched completely to [white list approach](#white-list-approach)
-- __Resources savvy__ - Exiting project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
+- __Resources savvy__ - Existing project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
 
 ### Installation
 
@@ -25,7 +25,7 @@ plugins:
 
 #### Eventual IAM policy update race condition issue
 
-If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue, described as following by AWS team:
+If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue described as following by AWS team:
 
 _It's a known situation and confirmed by the internal team that manages CloudFormation that the propagation of IAM policies and resources might take longer than CloudFormation to launch the dependent resources. This race condition happens now and then, and unfortunately CloudFormation team is not able to determine programmatically when a role is effectively available in a region._
 
