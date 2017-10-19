@@ -35,6 +35,11 @@ class ServerlessPluginDynamodbAutoscaling {
 	}
 	configure() {
 		this.resources[this.iamRoleResourceName] = this.configureIamRole();
+
+		// IamOnly option offers workaround for race condition not handled as expected
+		// by CloudFormation internals (more details on this case can be found in README.md)
+		if (this.pluginConfig.iamOnly) return;
+
 		Object.assign(this.resources, this.autoscalingResources);
 	}
 

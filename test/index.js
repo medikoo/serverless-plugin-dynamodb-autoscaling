@@ -200,6 +200,16 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	);
 
 	plugin = new Plugin(serverlessMock);
+	templateMock.Resources = Object.assign({}, tableNoIndexes);
+	configMock.dynamodbAutoscaling = { iamOnly: true };
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, roleResource, tableNoIndexes),
+		"Do not add autoscaling resources with iamOnly option"
+	);
+
+	plugin = new Plugin(serverlessMock);
 	templateMock.Resources = {};
 	configMock.dynamodbAutoscaling = 20;
 	t.throws(

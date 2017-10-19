@@ -20,8 +20,27 @@ Activate plugin in `serverless.yml`
 
 ```yaml
 plugins:
-  - serverless-plugin-dynamodb-autoscaling
+ - serverless-plugin-dynamodb-autoscaling
 ```
+
+#### Eventual IAM policy update race condition issue
+
+If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue,described as following by AWS team:
+
+_It's a known situation and confirmed by the internal team that manages CloudFormation that the propagation of IAM policies and resources might take longer than CloudFormation to launch the dependent resources. This race condition happens now and then, and unfortunately CloudFormation team is not able to determine programmatically when a role is effectively available in a region._
+
+To workaround it, the stack just with IAM polices update (and no autoscaling resources yet) needs to be deployed first, and then further deployment may carry the autoscaling resources update.
+
+To make handling of that case easier this plugin enables the IAM only deployment via `iamOnly` option.
+Therefore you may refer to this option as one-time mean
+
+```yaml
+custom:
+  dynamodbAutoscaling:
+    iamOnly: true
+```
+
+#### Tables configuration
 
 __By default autoscaling configuration is automatically applied to all preconfigured DynamoDB tables and all its eventual global secondary indexes.__
 
@@ -64,6 +83,8 @@ custom:
             # Tweaking one of the configuration option will also whitelist the index
             minCapacity: 100
 ```
+
+##### White list approach
 
 If you prefer _white list_ instead of _black list_ approach you can handle configuration as below
 
