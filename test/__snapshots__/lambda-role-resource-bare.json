@@ -119,8 +119,7 @@
                 "Effect": "Allow",
                 "Action": [
                   "dynamodb:*",
-                  "cloudwatch:*",
-                  "autoscaling:*"
+                  "cloudwatch:*"
                 ],
                 "Resource": [
                   "arn:aws:dynamodb:eu-west-1:*:table/maas-tsp-dev-*"

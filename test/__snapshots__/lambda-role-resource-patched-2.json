@@ -149,8 +149,7 @@
                 "Action": [
                   "dynamodb:DescribeTable",
                   "dynamodb:UpdateTable",
-                  "cloudwatch:*",
-                  "autoscaling:*"
+                  "cloudwatch:*"
                 ],
                 "Resource": "arn:aws:dynamodb:*"
               }

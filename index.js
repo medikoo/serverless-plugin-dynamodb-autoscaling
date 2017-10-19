@@ -194,7 +194,6 @@ class ServerlessPluginDynamodbAutoscaling {
 	configureIamRolePolicies() {
 		const action = this.iamRoleResourceDynamodbAction;
 		if (!action.includes("cloudwatch:*")) action.push("cloudwatch:*");
-		if (!action.includes("autoscaling:*")) action.push("autoscaling:*");
 	}
 }
 
