@@ -1,6 +1,8 @@
 [![Build status][circleci-image]][circleci-url]
 [![Build status][appveyor-image]][appveyor-url]
 [![Tests coverage][codecov-image]][codecov-url]
+![Transpilation status][transpilation-image]
+[![npm version][npm-image]][npm-url]
 
 # serverless-plugin-dynamodb-autoscaling
 ## Autoscaling configuration for DynamoDB tables
@@ -116,3 +118,6 @@ npm test
 [appveyor-url]: https://ci.appveyor.com/project/medikoo/serverless-plugin-dynamodb-autoscaling
 [codecov-image]: https://img.shields.io/codecov/c/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
 [codecov-url]: https://codecov.io/gh/medikoo/serverless-plugin-dynamodb-autoscaling
+[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
+[npm-image]: https://img.shields.io/npm/v/serverless-plugin-dynamodb-autoscaling.svg
+[npm-url]: https://www.npmjs.com/package/serverless-plugin-dynamodb-autoscaling
