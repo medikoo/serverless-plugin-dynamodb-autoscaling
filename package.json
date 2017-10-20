@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-dynamodb-autoscaling",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Auto configure autoscaling for preconfigured Dynamodb tables",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
