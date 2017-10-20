@@ -118,7 +118,8 @@
               {
                 "Effect": "Allow",
                 "Action": [
-                  "dynamodb:*"
+                  "dynamodb:*",
+                  "autoscaling:*"
                 ],
                 "Resource": [
                   "arn:aws:dynamodb:eu-west-1:*:table/maas-tsp-dev-*"
