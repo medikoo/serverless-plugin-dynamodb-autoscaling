@@ -199,9 +199,6 @@ class ServerlessPluginDynamodbAutoscaling {
 				}
 			);
 		}
-		if (!dynamodbStatement.Action.includes("autoscaling:*")) {
-			dynamodbStatement.Action.push("autoscaling:*");
-		}
 	}
 	configureIamRoleResourceCloudwatchAction() {
 		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;

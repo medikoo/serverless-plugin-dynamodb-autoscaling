@@ -29,8 +29,7 @@
                 "Effect": "Allow",
                 "Action": [
                   "dynamodb:DescribeTable",
-                  "dynamodb:UpdateTable",
-                  "autoscaling:*"
+                  "dynamodb:UpdateTable"
                 ],
                 "Resource": "arn:aws:dynamodb:*"
               },
