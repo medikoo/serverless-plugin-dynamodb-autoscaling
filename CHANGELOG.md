@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.3"></a>
+## [2.0.3](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v2.0.2...v2.0.3) (2017-10-23)
+
+
+### Bug Fixes
+
+* remove not necessary "autoscaling:*" policy ([4e4a2ac](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/commit/4e4a2ac))
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v2.0.1...v2.0.2) (2017-10-20)
 
