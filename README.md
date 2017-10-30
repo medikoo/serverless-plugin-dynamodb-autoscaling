@@ -87,11 +87,23 @@ custom:
       tableName1: true
 ```
 
-Configurable settings:
+##### Configurable settings:
 
 - `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
 - `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
 - `targetUsage` (defaults to `0.75`) refers to [`ScalingPolicy.TargetTrackingScalingPolicyConfiguration.TargetValue`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_TargetTrackingScalingPolicyConfiguration.html) (value is multiplied by `100` when assigned to `TargetValue` setting)
+
+#### `ScalingPolicy` chaining
+
+By default `ScalingPolicy` resources are chained via `DependsOn` property, so they're deployed sequentially and not in parallel. It's to avoid reaching eventual CloudWatch rate limits.
+
+Still it has a downside of slowing down the deployment. If number of tables in your stack is not large, or you've lifted rate limits on AWS side, then you can safely turn off that option to ensure more robust deployments:
+
+```yaml
+custom:
+  dynamodbAutoscaling:
+    chainScalingPolicies: false
+```
 
 ### Troubleshooting
 

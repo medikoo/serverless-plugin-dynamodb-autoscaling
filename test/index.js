@@ -14,6 +14,7 @@ const roleResource                = require("./__snapshots__/role-resource")
     , resourcesNoIndexes          = require("./__snapshots__/resources-no-indexes-default")
     , resourcesNoIndexesLambdaIam = require("./__snapshots__/resources-no-indexes-lambda-iam")
     , resourcesIndexes            = require("./__snapshots__/resources-indexes-default")
+    , resourcesIndexesNoChaining  = require("./__snapshots__/resources-indexes-no-chaining")
     , resourcesIndexesNoIndexes   = require("./__snapshots__/resources-indexes-no-indexes")
     , resourcesIndexesNoTable     = require("./__snapshots__/resources-indexes-no-table")
     , resourcesIndexesCustom      = require("./__snapshots__/resources-indexes-custom")
@@ -42,6 +43,16 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		templateMock.Resources,
 		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Automatically creates scaling resources for a table with indexes"
+	);
+
+	plugin = new Plugin(serverlessMock);
+	templateMock.Resources = Object.assign({}, tableIndexes);
+	configMock.dynamodbAutoscaling = { chainScalingPolicies: false };
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, roleResource, tableIndexes, resourcesIndexesNoChaining),
+		"Does not chain ScalingPolicy resources with `chainScalingPolicies: false`"
 	);
 
 	plugin = new Plugin(serverlessMock);

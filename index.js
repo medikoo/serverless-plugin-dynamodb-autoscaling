@@ -176,7 +176,9 @@ class ServerlessPluginDynamodbAutoscaling {
 				}
 			}
 		};
-		this.lastPolicyResourceName = policyResourceName;
+		if (this.pluginConfig.chainScalingPolicies) {
+			this.lastPolicyResourceName = policyResourceName;
+		}
 		return resources;
 	}
 
@@ -239,7 +241,7 @@ Object.defineProperties(
 		}),
 		pluginConfig: d(function () {
 			let pluginConfig = this.serverless.service.custom.dynamodbAutoscaling;
-			if (!isValue(pluginConfig)) return { tablesConfig: {} };
+			if (!isValue(pluginConfig)) return { tablesConfig: {}, chainScalingPolicies: true };
 			if (!isObject(pluginConfig)) {
 				throw new Error(
 					"Invalid 'dynamodbAutoscaling' configuration in serverless.yml. " +
@@ -254,6 +256,9 @@ Object.defineProperties(
 					"Invalid 'dynamodbAutoscaling.tablesConfig' configuration in serverless.yml. " +
 						"Expected an object"
 				);
+			}
+			if (!isValue(pluginConfig.chainScalingPolicies)) {
+				pluginConfig.chainScalingPolicies = true;
 			}
 			return pluginConfig;
 		}),
