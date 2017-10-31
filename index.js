@@ -160,7 +160,7 @@ class ServerlessPluginDynamodbAutoscaling {
 			},
 			[policyResourceName]: {
 				Type: "AWS::ApplicationAutoScaling::ScalingPolicy",
-				DependsOn: this.lastPolicyResourceName,
+				DependsOn: this.lastPolicyResourceId,
 				Properties: {
 					PolicyName: `${ modeCapitalized }AutoScalingPolicy`,
 					PolicyType: "TargetTrackingScaling",
@@ -177,7 +177,7 @@ class ServerlessPluginDynamodbAutoscaling {
 			}
 		};
 		if (this.pluginConfig.chainScalingPolicies) {
-			this.lastPolicyResourceName = policyResourceName;
+			this.lastPolicyResourceId = policyResourceName;
 		}
 		return resources;
 	}
