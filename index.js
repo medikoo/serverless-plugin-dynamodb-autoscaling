@@ -34,7 +34,7 @@ class ServerlessPluginDynamodbAutoscaling {
 		};
 	}
 	configure() {
-		this.resources[this.iamRoleResourceName] = this.configureIamRole();
+		this.resources[this.iamRoleResourceId] = this.configureIamRole();
 
 		// IamOnly option offers workaround for race condition not handled as expected
 		// by CloudFormation internals (more details on this case can be found in README.md)
@@ -151,7 +151,7 @@ class ServerlessPluginDynamodbAutoscaling {
 					MaxCapacity: config.maxCapacity,
 					MinCapacity: config.minCapacity,
 					ResourceId: { "Fn::Join": ["/", resourceAddress] },
-					RoleARN: { "Fn::GetAtt": `${ this.iamRoleResourceName }.Arn` },
+					RoleARN: { "Fn::GetAtt": `${ this.iamRoleResourceId }.Arn` },
 					ScalableDimension: `dynamodb:${ indexName
 						? "index"
 						: "table" }:${ modeCapitalized }CapacityUnits`,
@@ -297,15 +297,15 @@ Object.defineProperties(
 			}
 			return autoscalingResources;
 		}),
-		iamRoleResourceName: d(function () {
+		iamRoleResourceId: d(function () {
 			return this.resources.IamRoleLambdaExecution
 				? "IamRoleLambdaExecution"
 				: "DynamodbAutoscalingRole";
 		}),
 		iamRoleResource: d(function () {
 			return (
-				this.resources[this.iamRoleResourceName] ||
-				(this.resources[this.iamRoleResourceName] = {
+				this.resources[this.iamRoleResourceId] ||
+				(this.resources[this.iamRoleResourceId] = {
 					Type: "AWS::IAM::Role",
 					Properties: {
 						AssumeRolePolicyDocument: {
