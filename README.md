@@ -109,11 +109,17 @@ custom:
 
 #### Eventual IAM policy update race condition issue
 
-If at first deployment you're faced with `Unable to assume IAM role` or `Role is missing the following permissions` error, it can be result of a race condition issue described as following by AWS team:
+If at first deployment you're faced with one of the following errors:
+
+- `Unable to assume IAM role`
+- `Role is missing the following permissions`
+- `The security token included in the request is invalid`
+
+It can be result of a race condition issue described as following by AWS team:
 
 _It's a known situation and confirmed by the internal team that manages CloudFormation that the propagation of IAM policies and resources might take longer than CloudFormation to launch the dependent resources. This race condition happens now and then, and unfortunately CloudFormation team is not able to determine programmatically when a role is effectively available in a region._
 
-To workaround it, the stack just with IAM polices update (and no autoscaling resources yet) needs to be deployed first, and then further deployment may carry the autoscaling resources update.
+To workaround it, the stack with just IAM polices update (and no autoscaling resources yet) needs to be deployed first, and then further deployment may carry the autoscaling resources update (unfortunately just relying on `DependsOn` brings no rescue)
 
 To make handling of that case easier this plugin enables the IAM only deployment via `iamOnly` option, you may refer to this option as one-time mean
 
