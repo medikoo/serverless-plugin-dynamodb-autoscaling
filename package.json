@@ -3,14 +3,7 @@
   "version": "2.1.0",
   "description": "Auto configure autoscaling for preconfigured Dynamodb tables",
   "author": "Mariusz Nowak <medyk@medikoo.com> (http://www.medikoo.com/)",
-  "keywords": [
-    "serverless",
-    "plugin",
-    "lamdba",
-    "aws",
-    "dynamodb",
-    "autoscaling"
-  ],
+  "keywords": ["serverless", "plugin", "lamdba", "aws", "dynamodb", "autoscaling"],
   "repository": {
     "type": "git",
     "url": "git://github.com/medikoo/serverless-plugin-dynamodb-autoscaling.git"
@@ -42,7 +35,8 @@
   },
   "scripts": {
     "coverage": "istanbul cover test/index.js",
-    "check-coverage": "npm run coverage && istanbul check-coverage --statements 100 --function 100 --branches 100 --lines 100",
+    "check-coverage":
+      "npm run coverage && istanbul check-coverage --statements 100 --function 100 --branches 100 --lines 100",
     "lint": "eslint --ignore-path=.gitignore .",
     "test": "node test/index.js"
   },
