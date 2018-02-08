@@ -240,8 +240,7 @@ Object.defineProperties(
 			return this.serverless.service.provider.compiledCloudFormationTemplate.Resources;
 		}),
 		pluginConfig: d(function () {
-			let custom = this.serverless.service.custom || {};
-			let pluginConfig = custom.dynamodbAutoscaling;
+			let pluginConfig = (this.serverless.service.custom || {}).dynamodbAutoscaling;
 			if (!isValue(pluginConfig)) return { tablesConfig: {}, chainScalingPolicies: true };
 			if (!isObject(pluginConfig)) {
 				throw new Error(
