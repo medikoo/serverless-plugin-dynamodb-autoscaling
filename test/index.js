@@ -28,12 +28,14 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 
 	let plugin = new Plugin(serverlessMock);
 	templateMock.Resources = Object.assign({}, tableNoIndexes);
+	delete serverlessMock.service.custom;
 	plugin.configure();
 	t.deepEqual(
 		templateMock.Resources,
 		Object.assign({}, roleResource, tableNoIndexes, resourcesNoIndexes),
 		"Automatically creates scaling resources for a table"
 	);
+	serverlessMock.service.custom = configMock;
 
 	plugin = new Plugin(serverlessMock);
 	templateMock.Resources = Object.assign({}, tableIndexes);
