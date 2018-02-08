@@ -9,16 +9,16 @@
     "url": "git://github.com/medikoo/serverless-plugin-dynamodb-autoscaling.git"
   },
   "dependencies": {
-    "es5-ext": "^0.10.35",
+    "es5-ext": "^0.10.38",
     "minimatch": "^3.0.4"
   },
   "devDependencies": {
     "d": "1",
-    "eslint": "^4.7.2",
-    "eslint-config-medikoo": "^1.27",
+    "eslint": "^4.17",
+    "eslint-config-medikoo": "^1.31",
     "istanbul": "^0.4.5",
     "tape": "^4.8",
-    "tape-index": "^1.1"
+    "tape-index": "^1.1.1"
   },
   "peerDependencies": {
     "serverless": "1"
