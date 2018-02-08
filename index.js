@@ -152,9 +152,9 @@ class ServerlessPluginDynamodbAutoscaling {
 					MinCapacity: config.minCapacity,
 					ResourceId: { "Fn::Join": ["/", resourceAddress] },
 					RoleARN: { "Fn::GetAtt": `${ this.iamRoleResourceId }.Arn` },
-					ScalableDimension: `dynamodb:${ indexName
-						? "index"
-						: "table" }:${ modeCapitalized }CapacityUnits`,
+					ScalableDimension: `dynamodb:${
+						indexName ? "index" : "table"
+					}:${ modeCapitalized }CapacityUnits`,
 					ServiceNamespace: "dynamodb"
 				}
 			},
