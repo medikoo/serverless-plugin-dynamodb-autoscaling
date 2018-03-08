@@ -136,8 +136,8 @@ custom:
 npm test
 ```
 
-[semaphore-image]: https://semaphoreci.com/api/v1/medikoo/serverless-plugin-dynamodb-autoscaling/branches/master/badge.svg
-[semaphore-url]: https://semaphoreci.com/medikoo/serverless-plugin-dynamodb-autoscaling
+[semaphore-image]: https://semaphoreci.com/api/v1/medikoo-org/serverless-plugin-dynamodb-autoscaling/branches/master/badge.svg
+[semaphore-url]: https://semaphoreci.com/medikoo-org/serverless-plugin-dynamodb-autoscaling
 [appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/serverless-plugin-dynamodb-autoscaling.svg
 [appveyor-url]: https://ci.appveyor.com/project/medikoo/serverless-plugin-dynamodb-autoscaling
 [codecov-image]: https://img.shields.io/codecov/c/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
