@@ -5,10 +5,11 @@
 [![npm version][npm-image]][npm-url]
 
 # serverless-plugin-dynamodb-autoscaling
+
 ## Autoscaling configuration for DynamoDB tables
 
-- __Convention over configuration approach__ - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched to [white list approach](#white-list-approach)
-- __Resources savvy__ - Existing project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
+* **Convention over configuration approach** - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched to [white list approach](#white-list-approach)
+* **Resources savvy** - Existing project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
 
 ### Installation
 
@@ -39,11 +40,11 @@ custom:
   dynamodbAutoscaling:
     tablesConfig:
       # Disable autoscaling for tableName1 table entirely
-      tableName1: false 
+      tableName1: false
 
       # Disable autoscaling just for indexes of tableName2 table
       tableName2:
-        indexes: false 
+        indexes: false
 
       # Tweak minCapacity setting for tableName3 (for both table and indexes)
       tableName3:
@@ -89,9 +90,9 @@ custom:
 
 ##### Configurable settings:
 
-- `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
-- `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
-- `targetUsage` (defaults to `0.75`) refers to [`ScalingPolicy.TargetTrackingScalingPolicyConfiguration.TargetValue`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_TargetTrackingScalingPolicyConfiguration.html) (value is multiplied by `100` when assigned to `TargetValue` setting)
+* `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
+* `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
+* `targetUsage` (defaults to `0.75`) refers to [`ScalingPolicy.TargetTrackingScalingPolicyConfiguration.TargetValue`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_TargetTrackingScalingPolicyConfiguration.html) (value is multiplied by `100` when assigned to `TargetValue` setting)
 
 #### `ScalingPolicy` chaining
 
@@ -111,9 +112,9 @@ custom:
 
 If at first deployment you're faced with one of the following errors:
 
-- `Unable to assume IAM role`
-- `Role is missing the following permissions`
-- `The security token included in the request is invalid`
+* `Unable to assume IAM role`
+* `Role is missing the following permissions`
+* `The security token included in the request is invalid`
 
 It can be result of a race condition issue described as following by AWS team:
 
@@ -128,8 +129,6 @@ custom:
   dynamodbAutoscaling:
     iamOnly: true
 ```
-
-
 
 ### Tests
 
