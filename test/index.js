@@ -32,8 +32,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	delete serverlessMock.service.custom;
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableNoIndexes, resourcesNoIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableNoIndexes, resourcesNoIndexes),
 		"Automatically creates scaling resources for a table"
 	);
 	serverlessMock.service.custom = configMock;
@@ -43,8 +42,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = {};
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Automatically creates scaling resources for a table with indexes"
 	);
 
@@ -73,8 +71,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { read: false, write: false } } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, tableNoIndexes, roleResource),
+		templateMock.Resources, Object.assign({}, tableNoIndexes, roleResource),
 		"Does not autoscale with read: false and write: false"
 	);
 
@@ -83,8 +80,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": false } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({ Foo: {} }, tableIndexes, roleResource),
+		templateMock.Resources, Object.assign({ Foo: {} }, tableIndexes, roleResource),
 		"Does not autoscale with *: false"
 	);
 
@@ -93,8 +89,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": true } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on *: true setting"
 	);
 
@@ -103,8 +98,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": null } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on *: null setting"
 	);
 
@@ -138,8 +132,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { indexes: true } } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on indexes: true setting"
 	);
 
@@ -148,8 +141,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { indexes: { "*": true } } } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on indexes: { *: true } setting"
 	);
 
@@ -158,8 +150,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { indexes: { read: true } } } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on indexes: { read: true } setting"
 	);
 
@@ -168,8 +159,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { indexes: { marko: true } } } };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableIndexes, resourcesIndexes),
 		"Apply defaults on indexes: { indexName: true } setting"
 	);
 
@@ -218,8 +208,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { iamOnly: true };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, roleResource, tableNoIndexes),
+		templateMock.Resources, Object.assign({}, roleResource, tableNoIndexes),
 		"Do not add autoscaling resources with iamOnly option"
 	);
 
@@ -228,8 +217,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	configMock.dynamodbAutoscaling = { iamRole: "autoscaling-role-arn" };
 	plugin.configure();
 	t.deepEqual(
-		templateMock.Resources,
-		Object.assign({}, tableNoIndexes, resourcesNoIndexesIAMRole),
+		templateMock.Resources, Object.assign({}, tableNoIndexes, resourcesNoIndexesIAMRole),
 		"Do not add iam resources with iamRole option"
 	);
 
@@ -237,8 +225,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = {};
 	configMock.dynamodbAutoscaling = 20;
 	t.throws(
-		() => plugin.configure(),
-		/Invalid 'dynamodbAutoscaling' configuration/,
+		() => plugin.configure(), /Invalid 'dynamodbAutoscaling' configuration/,
 		"Throws on invalid plugin configuration"
 	);
 
@@ -246,8 +233,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = {};
 	configMock.dynamodbAutoscaling = { tablesConfig: 20 };
 	t.throws(
-		() => plugin.configure(),
-		/Invalid 'dynamodbAutoscaling.tablesConfig' configuration/,
+		() => plugin.configure(), /Invalid 'dynamodbAutoscaling.tablesConfig' configuration/,
 		"Throws on invalid plugin configuration"
 	);
 	t.end();
