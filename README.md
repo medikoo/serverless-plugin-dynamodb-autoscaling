@@ -1,6 +1,6 @@
-[![Build status][semaphore-image]][semaphore-url]
-[![Windows status][appveyor-image]][appveyor-url]
-[![Tests coverage][codecov-image]][codecov-url]
+[![*nix build status][nix-build-image]][nix-build-url]
+[![Windows build status][win-build-image]][win-build-url]
+[![Tests coverage][cov-image]][cov-url]
 ![Transpilation status][transpilation-image]
 [![npm version][npm-image]][npm-url]
 
@@ -8,8 +8,8 @@
 
 ## Autoscaling configuration for DynamoDB tables
 
-* **Convention over configuration approach** - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched to [white list approach](#white-list-approach)
-* **Resources savvy** - Existing project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
+- **Convention over configuration approach** - Automatically discovers preconfigured tables and accompanies them with dedicated scaling resources. Configuration can be [fine tuned](#tables-configuration) addressing specific tables or indexes, or switched to [white list approach](#white-list-approach)
+- **Resources savvy** - Existing project's IAM role is reused for handling scaling target resources. It's only mandatory `ScalableTarget` and `ScalingPolicy` resources that are added to CloudFormation stack
 
 ### Installation
 
@@ -23,7 +23,7 @@ Activate plugin in `serverless.yml`
 
 ```yaml
 plugins:
- - serverless-plugin-dynamodb-autoscaling
+  - serverless-plugin-dynamodb-autoscaling
 ```
 
 In most cases it's all you need to have autoscaling resources configured.
@@ -90,9 +90,9 @@ custom:
 
 ##### Configurable settings:
 
-* `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
-* `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
-* `targetUsage` (defaults to `0.75`) refers to [`ScalingPolicy.TargetTrackingScalingPolicyConfiguration.TargetValue`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_TargetTrackingScalingPolicyConfiguration.html) (value is multiplied by `100` when assigned to `TargetValue` setting)
+- `maxCapacity` (defaults to `200`) refers to [`ScalableTarget.MaxCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
+- `minCapacity` (defaults to `5`) refers to [`ScalableTarget.MinCapacity`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_RegisterScalableTarget.html#API_RegisterScalableTarget_RequestSyntax)
+- `targetUsage` (defaults to `0.75`) refers to [`ScalingPolicy.TargetTrackingScalingPolicyConfiguration.TargetValue`](http://docs.aws.amazon.com/ApplicationAutoScaling/latest/APIReference/API_TargetTrackingScalingPolicyConfiguration.html) (value is multiplied by `100` when assigned to `TargetValue` setting)
 
 #### `ScalingPolicy` chaining
 
@@ -112,9 +112,9 @@ custom:
 
 If at first deployment you're faced with one of the following errors:
 
-* `Unable to assume IAM role`
-* `Role is missing the following permissions`
-* `The security token included in the request is invalid`
+- `Unable to assume IAM role`
+- `Role is missing the following permissions`
+- `The security token included in the request is invalid`
 
 It can be result of a race condition issue described as following by AWS team:
 
@@ -136,12 +136,12 @@ custom:
 npm test
 ```
 
-[semaphore-image]: https://semaphoreci.com/api/v1/medikoo-org/serverless-plugin-dynamodb-autoscaling/branches/master/badge.svg
-[semaphore-url]: https://semaphoreci.com/medikoo-org/serverless-plugin-dynamodb-autoscaling
-[appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/serverless-plugin-dynamodb-autoscaling.svg
-[appveyor-url]: https://ci.appveyor.com/project/medikoo/serverless-plugin-dynamodb-autoscaling
-[codecov-image]: https://img.shields.io/codecov/c/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
-[codecov-url]: https://codecov.io/gh/medikoo/serverless-plugin-dynamodb-autoscaling
+[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/serverless-plugin-dynamodb-autoscaling/branches/master/shields_badge.svg
+[nix-build-url]: https://semaphoreci.com/medikoo-org/serverless-plugin-dynamodb-autoscaling
+[win-build-image]: https://ci.appveyor.com/api/projects/status/nn6s7mu5f9e14h6o?svg=true
+[win-build-url]: https://ci.appveyor.com/project/medikoo/serverless-plugin-dynamodb-autoscaling
+[cov-image]: https://img.shields.io/codecov/c/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
+[cov-url]: https://codecov.io/gh/medikoo/serverless-plugin-dynamodb-autoscaling
 [transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
 [npm-image]: https://img.shields.io/npm/v/serverless-plugin-dynamodb-autoscaling.svg
 [npm-url]: https://www.npmjs.com/package/serverless-plugin-dynamodb-autoscaling
