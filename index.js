@@ -111,9 +111,7 @@ class ServerlessPluginDynamodbAutoscaling {
 			Object.assign(
 				resources,
 				this.generateEntityResources(
-					config.indexes[indexName] || config.indexes["*"],
-					resource.name,
-					indexName
+					config.indexes[indexName] || config.indexes["*"], resource.name, indexName
 				)
 			);
 		}
@@ -137,9 +135,9 @@ class ServerlessPluginDynamodbAutoscaling {
 	}
 	generateDimensionResources(mode, config, tableResourceName, indexName = null) {
 		const modeCapitalized = capitalize.call(mode);
-		const resourceNamePrefix = `${ tableResourceName }${ resolveIndexToken(
-			indexName
-		) }${ modeCapitalized }`;
+		const resourceNamePrefix = `${ tableResourceName }${ resolveIndexToken(indexName) }${
+			modeCapitalized
+		}`;
 
 		const targetResourceName = `${ resourceNamePrefix }ScalableTarget`;
 		const policyResourceName = `${ resourceNamePrefix }ScalingPolicy`;
@@ -147,8 +145,8 @@ class ServerlessPluginDynamodbAutoscaling {
 		if (indexName) resourceAddress.push("index", indexName);
 
 		const roleARN = isValue(this.pluginConfig.iamRole)
-							? this.pluginConfig.iamRole
-							: { "Fn::GetAtt": `${ this.iamRoleResourceId }.Arn` };
+			? this.pluginConfig.iamRole
+			: { "Fn::GetAtt": `${ this.iamRoleResourceId }.Arn` };
 
 		const resources = {
 			[targetResourceName]: {
@@ -158,9 +156,9 @@ class ServerlessPluginDynamodbAutoscaling {
 					MinCapacity: config.minCapacity,
 					ResourceId: { "Fn::Join": ["/", resourceAddress] },
 					RoleARN: roleARN,
-					ScalableDimension: `dynamodb:${
-						indexName ? "index" : "table"
-					}:${ modeCapitalized }CapacityUnits`,
+					ScalableDimension: `dynamodb:${ indexName ? "index" : "table" }:${
+						modeCapitalized
+					}CapacityUnits`,
 					ServiceNamespace: "dynamodb"
 				}
 			},
@@ -211,14 +209,11 @@ class ServerlessPluginDynamodbAutoscaling {
 	configureIamRoleResourceCloudwatchAction() {
 		const statements = this.iamRoleResource.Properties.Policies[0].PolicyDocument.Statement;
 		let cloudwatchStatement = statements.find(statement =>
-			statement.Action.some(action => action === "cloudwatch:*"));
+			statement.Action.some(action => action === "cloudwatch:*")
+		);
 		if (!cloudwatchStatement) {
 			statements.push(
-				cloudwatchStatement = {
-					Effect: "Allow",
-					Action: ["cloudwatch:*"],
-					Resource: "*"
-				}
+				cloudwatchStatement = { Effect: "Allow", Action: ["cloudwatch:*"], Resource: "*" }
 			);
 		}
 	}
@@ -270,7 +265,8 @@ Object.defineProperties(
 		}),
 		tablesConfig: d(function () {
 			const resolvedPluginConfig = objMap(this.pluginConfig.tablesConfig, config =>
-				this.resolveTableConfig(config));
+				this.resolveTableConfig(config)
+			);
 			return Object.keys(this.resources)
 				.map(resourceName => {
 					const resource = this.resources[resourceName];
@@ -319,9 +315,7 @@ Object.defineProperties(
 							Statement: [
 								{
 									Effect: "Allow",
-									Principal: {
-										Service: []
-									},
+									Principal: { Service: [] },
 									Action: ["sts:AssumeRole"]
 								}
 							]
