@@ -13,6 +13,7 @@ const roleResource                = require("./__snapshots__/role-resource")
     , tableIndexes                = require("./__snapshots__/table-indexes")
     , resourcesNoIndexes          = require("./__snapshots__/resources-no-indexes-default")
     , resourcesNoIndexesLambdaIam = require("./__snapshots__/resources-no-indexes-lambda-iam")
+    , resourcesNoIndexesIAMRole   = require("./__snapshots__/resources-no-indexes-iam-role")
     , resourcesIndexes            = require("./__snapshots__/resources-indexes-default")
     , resourcesIndexesNoChaining  = require("./__snapshots__/resources-indexes-no-chaining")
     , resourcesIndexesNoIndexes   = require("./__snapshots__/resources-indexes-no-indexes")
@@ -220,6 +221,16 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		templateMock.Resources,
 		Object.assign({}, roleResource, tableNoIndexes),
 		"Do not add autoscaling resources with iamOnly option"
+	);
+
+	plugin = new Plugin(serverlessMock);
+	templateMock.Resources = Object.assign({}, tableNoIndexes);
+	configMock.dynamodbAutoscaling = { iamRole: "autoscaling-role-arn" };
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, tableNoIndexes, resourcesNoIndexesIAMRole),
+		"Do not add iam resources with iamRole option"
 	);
 
 	plugin = new Plugin(serverlessMock);
