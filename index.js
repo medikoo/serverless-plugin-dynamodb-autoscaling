@@ -34,7 +34,7 @@ class ServerlessPluginDynamodbAutoscaling {
 		};
 	}
 	configure() {
-		if (!isValue(this.pluginConfig.iamRoleArn)) {
+		if (!this.pluginConfig.iamRoleArn) {
 			this.resources[this.iamRoleResourceId] = this.configureIamRole();
 		}
 
@@ -144,9 +144,9 @@ class ServerlessPluginDynamodbAutoscaling {
 		const resourceAddress = ["table", { Ref: tableResourceName }];
 		if (indexName) resourceAddress.push("index", indexName);
 
-		const roleARN = isValue(this.pluginConfig.iamRoleArn)
-			? this.pluginConfig.iamRoleArn
-			: { "Fn::GetAtt": `${ this.iamRoleResourceId }.Arn` };
+		const roleARN = this.pluginConfig.iamRoleArn || {
+			"Fn::GetAtt": `${ this.iamRoleResourceId }.Arn`
+		};
 
 		const resources = {
 			[targetResourceName]: {
