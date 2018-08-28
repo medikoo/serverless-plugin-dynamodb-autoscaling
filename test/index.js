@@ -214,11 +214,11 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 
 	plugin = new Plugin(serverlessMock);
 	templateMock.Resources = Object.assign({}, tableNoIndexes);
-	configMock.dynamodbAutoscaling = { iamRole: "autoscaling-role-arn" };
+	configMock.dynamodbAutoscaling = { iamRoleArn: "autoscaling-role-arn" };
 	plugin.configure();
 	t.deepEqual(
 		templateMock.Resources, Object.assign({}, tableNoIndexes, resourcesNoIndexesIAMRole),
-		"Do not add iam resources with iamRole option"
+		"Do not add iam resources with iamRoleArn option"
 	);
 
 	plugin = new Plugin(serverlessMock);
