@@ -24,7 +24,7 @@ const entitySettingNames = new Set(
 );
 
 const resolveIndexToken = indexName =>
-	indexName ? capitalize.call(hyphenToCamel.call(indexName).replace(/[^a-zA-Z0-9]/g, "")) : "";
+	indexName ? capitalize.call(hyphenToCamel.call(indexName).replace(/[^a-zA-Z0-9]/gu, "")) : "";
 
 class ServerlessPluginDynamodbAutoscaling {
 	constructor(serverless) {
@@ -180,9 +180,7 @@ class ServerlessPluginDynamodbAutoscaling {
 				}
 			}
 		};
-		if (this.pluginConfig.chainScalingPolicies) {
-			this.lastPolicyResourceId = policyResourceName;
-		}
+		if (this.pluginConfig.chainScalingPolicies) this.lastPolicyResourceId = policyResourceName;
 		return resources;
 	}
 

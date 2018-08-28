@@ -225,7 +225,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = {};
 	configMock.dynamodbAutoscaling = 20;
 	t.throws(
-		() => plugin.configure(), /Invalid 'dynamodbAutoscaling' configuration/,
+		() => plugin.configure(), /Invalid 'dynamodbAutoscaling' configuration/u,
 		"Throws on invalid plugin configuration"
 	);
 
@@ -233,7 +233,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = {};
 	configMock.dynamodbAutoscaling = { tablesConfig: 20 };
 	t.throws(
-		() => plugin.configure(), /Invalid 'dynamodbAutoscaling.tablesConfig' configuration/,
+		() => plugin.configure(), /Invalid 'dynamodbAutoscaling.tablesConfig' configuration/u,
 		"Throws on invalid plugin configuration"
 	);
 	t.end();
