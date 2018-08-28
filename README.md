@@ -27,7 +27,7 @@ plugins:
 ```
 
 In most cases it's all you need to have autoscaling resources configured.
-Still if you need to fine tune configuration for some reason see [below section](#tables-configuration). Additionally if you approach any errors during CloudFormation deployment, refer to [troubleshooting](#troubleshooting)
+Still if you need to fine tune configuration for some reason see [tables](#tables-configuration) and [IAM role](#iam-role-configuration) configuration. Additionally if you approach any errors during CloudFormation deployment, refer to [troubleshooting](#troubleshooting)
 
 #### Tables configuration
 
@@ -104,6 +104,17 @@ Still it has a downside of slowing down the deployment. If number of tables in y
 custom:
   dynamodbAutoscaling:
     chainScalingPolicies: false
+```
+
+#### IAM role configuration
+
+By default existing lambda IAM role is reused (if recognized) or new dedicated IAM role is created.
+Still it's possible to handle IAM configuration outside of this plugin, for that just pass ARN of externally configured IAM role via `iamRoleArn` setting:
+
+```yaml
+custom:
+  dynamodbAutoscaling:
+    iamRoleArn: "arn-of-iam-role-to-handle-tables"
 ```
 
 ### Troubleshooting
