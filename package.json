@@ -46,5 +46,5 @@
     "lint": "eslint --ignore-path=.gitignore .",
     "test": "node test/index.js"
   },
-  "license": "MIT"
+  "license": "ISC"
 }
