@@ -46,8 +46,9 @@ custom:
       tableName2:
         indexes: false
 
-      # Tweak minCapacity setting for tableName3 (for both table and indexes)
-      tableName3:
+      # Tweak minCapacity setting for all tables that start with tableName
+      # (glob patterns can be used)
+      tableName*:
         minCapacity: 10
 
       tableName4:
