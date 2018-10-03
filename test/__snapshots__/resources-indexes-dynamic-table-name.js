@@ -2,87 +2,87 @@
 
 module.exports = {
     DynamicTableReadScalableTarget: {
-      Type: 'AWS::ApplicationAutoScaling::ScalableTarget',
+      Type: "AWS::ApplicationAutoScaling::ScalableTarget",
       Properties: {
         MaxCapacity: 5,
         MinCapacity: 5,
         ResourceId: {
-          'Fn::Join': [
-            '/',
+          "Fn::Join": [
+            "/",
             [
-              'table',
+              "table",
               {
-                Ref: 'DynamicTable'
+                Ref: "DynamicTable"
               }
             ]
           ]
         },
         RoleARN: {
-          'Fn::GetAtt': 'DynamodbAutoscalingRole.Arn'
+          "Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
         },
-        ScalableDimension: 'dynamodb:table:ReadCapacityUnits',
-        ServiceNamespace: 'dynamodb'
+        ScalableDimension: "dynamodb:table:ReadCapacityUnits",
+        ServiceNamespace: "dynamodb"
       }
     },
     DynamicTableReadScalingPolicy: {
-      Type: 'AWS::ApplicationAutoScaling::ScalingPolicy',
+      Type: "AWS::ApplicationAutoScaling::ScalingPolicy",
       DependsOn: undefined,
       Properties: {
-        PolicyName: 'ReadAutoScalingPolicy',
-        PolicyType: 'TargetTrackingScaling',
+        PolicyName: "ReadAutoScalingPolicy",
+        PolicyType: "TargetTrackingScaling",
         ScalingTargetId: {
-          Ref: 'DynamicTableReadScalableTarget'
+          Ref: "DynamicTableReadScalableTarget"
         },
         TargetTrackingScalingPolicyConfiguration: {
           TargetValue: 75,
           ScaleInCooldown: 60,
           ScaleOutCooldown: 60,
           PredefinedMetricSpecification: {
-            PredefinedMetricType: 'DynamoDBReadCapacityUtilization'
+            PredefinedMetricType: "DynamoDBReadCapacityUtilization"
           }
         }
       }
     },
     DynamicTableWriteScalableTarget: {
-      Type: 'AWS::ApplicationAutoScaling::ScalableTarget',
+      Type: "AWS::ApplicationAutoScaling::ScalableTarget",
       Properties: {
         MaxCapacity: 5,
         MinCapacity: 5,
         ResourceId: {
-          'Fn::Join': [
-            '/',
+          "Fn::Join": [
+            "/",
             [
-              'table',
+              "table",
               {
-                Ref: 'DynamicTable'
+                Ref: "DynamicTable"
               }
             ]
           ]
         },
         RoleARN: {
-          'Fn::GetAtt': 'DynamodbAutoscalingRole.Arn'
+          "Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
         },
-        ScalableDimension: 'dynamodb:table:WriteCapacityUnits',
-        ServiceNamespace: 'dynamodb'
+        ScalableDimension: "dynamodb:table:WriteCapacityUnits",
+        ServiceNamespace: "dynamodb"
       }
     },
     DynamicTableWriteScalingPolicy: {
-      Type: 'AWS::ApplicationAutoScaling::ScalingPolicy',
-      DependsOn: 'DynamicTableReadScalingPolicy',
+      Type: "AWS::ApplicationAutoScaling::ScalingPolicy",
+      DependsOn: "DynamicTableReadScalingPolicy",
       Properties: {
-        PolicyName: 'WriteAutoScalingPolicy',
-        PolicyType: 'TargetTrackingScaling',
+        PolicyName: "WriteAutoScalingPolicy",
+        PolicyType: "TargetTrackingScaling",
         ScalingTargetId: {
-          Ref: 'DynamicTableWriteScalableTarget'
+          Ref: "DynamicTableWriteScalableTarget"
         },
         TargetTrackingScalingPolicyConfiguration: {
           TargetValue: 75,
           ScaleInCooldown: 60,
           ScaleOutCooldown: 60,
           PredefinedMetricSpecification: {
-            PredefinedMetricType: 'DynamoDBWriteCapacityUtilization'
+            PredefinedMetricType: "DynamoDBWriteCapacityUtilization"
           }
         }
       }
     }
-  }
+  };

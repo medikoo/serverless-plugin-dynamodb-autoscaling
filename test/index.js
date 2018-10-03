@@ -128,12 +128,12 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		Object.assign({}, roleResource, tableIndexes, resourcesIndexesCustom2),
 		"Apply specific table custom settings"
     );
-    
+
 	plugin = new Plugin(serverlessMock);
 	templateMock.Resources = Object.assign({}, tableDynamicName);
 	configMock.dynamodbAutoscaling = {
 		tablesConfig: {
-			"DynamicTable": { table: { maxCapacity: 5 } }
+			DynamicTable: { table: { maxCapacity: 5 } }
 		}
 	};
 	plugin.configure();
@@ -142,7 +142,7 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		Object.assign({}, tableDynamicName, roleResource, resourcesDynamicTablename),
 		"Apply table specific settings to Fn::Sub tablename"
 	);
-    
+
 	plugin = new Plugin(serverlessMock);
 	templateMock.Resources = Object.assign({}, tableIndexes);
 	configMock.dynamodbAutoscaling = { tablesConfig: { "*": { indexes: true } } };
