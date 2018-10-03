@@ -36,6 +36,19 @@ By default autoscaling configuration is automatically applied to all preconfigur
 Still, we can exclude individual tables or tweak their configuration via configuration within`serverless.yml` config:
 
 ```yaml
+resources:
+  Resources:
+    Table1:
+      Properties:
+        TableName: tableName1
+    Table2:
+      Properties:
+        TableName: tableName2
+    ...
+    Table7:
+      Properties:
+        TableName: 
+          Fn::Sub: ${AWS::Region}-table
 custom:
   dynamodbAutoscaling:
     tablesConfig:
@@ -72,6 +85,10 @@ custom:
           bar:
             # Tweaking one of the configuration option will also whitelist the index
             minCapacity: 100
+      
+      # Table names created with Cloudformation params can be referenced by Resource name
+      Table7:
+        minCapacity: 10
 ```
 
 ###### White list approach
