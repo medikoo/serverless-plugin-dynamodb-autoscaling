@@ -303,30 +303,32 @@ Object.defineProperties(
 				: "DynamodbAutoscalingRole";
 		}),
 		iamRoleResource: d(function () {
-			return (
-				this.resources[this.iamRoleResourceId] ||
-				(this.resources[this.iamRoleResourceId] = {
-					Type: "AWS::IAM::Role",
-					Properties: {
-						AssumeRolePolicyDocument: {
-							Version: "2012-10-17",
-							Statement: [
-								{
-									Effect: "Allow",
-									Principal: { Service: [] },
-									Action: ["sts:AssumeRole"]
-								}
-							]
-						},
-						Path: "/",
-						Policies: [
+			const defaultRole = {
+				Type: "AWS::IAM::Role",
+				Properties: {
+					AssumeRolePolicyDocument: {
+						Version: "2012-10-17",
+						Statement: [
 							{
-								PolicyName: "root",
-								PolicyDocument: { Version: "2012-10-17", Statement: [] }
+								Effect: "Allow",
+								Principal: { Service: [] },
+								Action: ["sts:AssumeRole"]
 							}
 						]
-					}
-				})
+					},
+					Path: "/",
+					Policies: [
+						{
+							PolicyName: "root",
+							PolicyDocument: { Version: "2012-10-17", Statement: [] }
+						}
+					]
+				}
+			};
+			return (this.resources[this.iamRoleResourceId] =
+				this.resources.IamRoleLambdaExecution
+					? this.resources[this.iamRoleResourceId]
+					: assignDeep({}, defaultRole, this.resources[this.iamRoleResourceId] || {})
 			);
 		})
 	})

@@ -1,6 +1,7 @@
 "use strict";
 
-const copyDeep = require("es5-ext/object/copy-deep")
+const assignDeep = require("es5-ext/object/assign-deep")
+    , copyDeep = require("es5-ext/object/copy-deep")
     , test     = require("tape")
     , Plugin   = require("../");
 
@@ -34,6 +35,24 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	t.deepEqual(
 		templateMock.Resources, Object.assign({}, roleResource, tableNoIndexes, resourcesNoIndexes),
 		"Automatically creates scaling resources for a table"
+	);
+	serverlessMock.service.custom = configMock;
+
+	plugin = new Plugin(serverlessMock);
+	const resourceOverride = {
+		DynamodbAutoscalingRole: {
+			Properties: {
+				RoleName: "NextbikeCustomersAutoscalingRole"
+			}
+		}
+	};
+	templateMock.Resources = Object.assign({}, tableNoIndexes, resourceOverride);
+	delete serverlessMock.service.custom;
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		assignDeep({}, roleResource, tableNoIndexes, resourcesNoIndexes, resourceOverride),
+		"Respects resource overrides when creating scaling resources for a table"
 	);
 	serverlessMock.service.custom = configMock;
 
