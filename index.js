@@ -269,14 +269,11 @@ Object.defineProperties(
 				.map(resourceName => {
 					const resource = this.resources[resourceName];
 					if (resource.Type !== "AWS::DynamoDB::Table") return null;
-					const tableName = isObject(resource.Properties.TableName)
-						? resourceName
-						: resource.Properties.TableName;
 					const configList = compact.call(
 						objToArray(
 							resolvedPluginConfig,
 							(config, pattern) =>
-								minimatch(tableName, pattern)
+								minimatch(resourceName, pattern)
 									? copyDeep(config)
 									: null
 						)

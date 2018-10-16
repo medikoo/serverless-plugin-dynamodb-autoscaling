@@ -118,8 +118,8 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = Object.assign({}, tableIndexes);
 	configMock.dynamodbAutoscaling = {
 		tablesConfig: {
-			"maas-tsp-dev-nextbike-customers": { table: { maxCapacity: 800 } },
-			"elo": { minCapactity: 30 }
+			NextbikeCustomers: { table: { maxCapacity: 800 } },
+			elo: { minCapacity: 30 }
 		}
 	};
 	plugin.configure();
