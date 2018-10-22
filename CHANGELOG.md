@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v2.2.0...v3.0.0) (2018-10-22)
+
+
+### Features
+
+* address tables by resource names in custom config ([286f1d5](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/commit/286f1d5))
+
+
+### BREAKING CHANGES
+
+* Tables in configuration should now be addressed by CloudFormation resource name and not as it was so far table name (as passed in `TableName` property)
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v2.1.1...v2.2.0) (2018-08-28)
 
