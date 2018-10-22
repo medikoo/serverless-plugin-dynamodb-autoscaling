@@ -273,7 +273,7 @@ Object.defineProperties(
 						objToArray(
 							resolvedPluginConfig,
 							(config, pattern) =>
-								minimatch(resource.Properties.TableName, pattern)
+								minimatch(resourceName, pattern)
 									? copyDeep(config)
 									: null
 						)

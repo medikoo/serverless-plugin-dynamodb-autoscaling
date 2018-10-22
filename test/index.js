@@ -11,6 +11,7 @@ const roleResource                = require("./__snapshots__/role-resource")
     , lambdaRoleResourcePatched2  = require("./__snapshots__/lambda-role-resource-patched-2")
     , tableNoIndexes              = require("./__snapshots__/table-no-indexes")
     , tableIndexes                = require("./__snapshots__/table-indexes")
+    , tableDynamicName            = require("./__snapshots__/table-dynamic-name")
     , resourcesNoIndexes          = require("./__snapshots__/resources-no-indexes-default")
     , resourcesNoIndexesLambdaIam = require("./__snapshots__/resources-no-indexes-lambda-iam")
     , resourcesNoIndexesIAMRole   = require("./__snapshots__/resources-no-indexes-iam-role")
@@ -19,7 +20,8 @@ const roleResource                = require("./__snapshots__/role-resource")
     , resourcesIndexesNoIndexes   = require("./__snapshots__/resources-indexes-no-indexes")
     , resourcesIndexesNoTable     = require("./__snapshots__/resources-indexes-no-table")
     , resourcesIndexesCustom      = require("./__snapshots__/resources-indexes-custom")
-    , resourcesIndexesCustom2     = require("./__snapshots__/resources-indexes-custom-2");
+    , resourcesIndexesCustom2     = require("./__snapshots__/resources-indexes-custom-2")
+    , resourcesDynamicTablename   = require("./__snapshots__/resources-indexes-dynamic-table-name");
 
 test("Serverless Plugin Dynamodb Autoscaling", t => {
 	const templateMock = {}, configMock = {};
@@ -116,8 +118,8 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 	templateMock.Resources = Object.assign({}, tableIndexes);
 	configMock.dynamodbAutoscaling = {
 		tablesConfig: {
-			"maas-tsp-dev-nextbike-customers": { table: { maxCapacity: 800 } },
-			"elo": { minCapactity: 30 }
+			NextbikeCustomers: { table: { maxCapacity: 800 } },
+			elo: { minCapacity: 30 }
 		}
 	};
 	plugin.configure();
@@ -125,6 +127,20 @@ test("Serverless Plugin Dynamodb Autoscaling", t => {
 		templateMock.Resources,
 		Object.assign({}, roleResource, tableIndexes, resourcesIndexesCustom2),
 		"Apply specific table custom settings"
+    );
+
+	plugin = new Plugin(serverlessMock);
+	templateMock.Resources = Object.assign({}, tableDynamicName);
+	configMock.dynamodbAutoscaling = {
+		tablesConfig: {
+			DynamicTable: { table: { maxCapacity: 5 } }
+		}
+	};
+	plugin.configure();
+	t.deepEqual(
+		templateMock.Resources,
+		Object.assign({}, tableDynamicName, roleResource, resourcesDynamicTablename),
+		"Apply table specific settings to Fn::Sub tablename"
 	);
 
 	plugin = new Plugin(serverlessMock);

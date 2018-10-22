@@ -36,35 +36,47 @@ By default autoscaling configuration is automatically applied to all preconfigur
 Still, we can exclude individual tables or tweak their configuration via configuration within`serverless.yml` config:
 
 ```yaml
+resources:
+  Resources:
+    Table1:
+      Properties:
+        TableName: tableName1
+    Table2:
+      Properties:
+        TableName: tableName2
+    Table3:
+      Properties:
+        TableName: 
+          Fn::Sub: ${AWS::Region}-table
 custom:
   dynamodbAutoscaling:
     tablesConfig:
-      # Disable autoscaling for tableName1 table entirely
-      tableName1: false
+      # Disable autoscaling for Table1 table entirely
+      Table1: false
 
-      # Disable autoscaling just for indexes of tableName2 table
-      tableName2:
+      # Disable autoscaling just for indexes of Table2 table
+      Table2:
         indexes: false
 
-      # Tweak minCapacity setting for all tables that start with tableName
+      # Tweak minCapacity setting for all tables that start with Table
       # (glob patterns can be used)
-      tableName*:
+      Table*:
         minCapacity: 10
 
-      tableName4:
-        # Tweak maxCapacity setting for tableName4 (just table)
+      Table4:
+        # Tweak maxCapacity setting for Table4 (just table)
         table:
           maxCapacity: 300
-        # Tweak targetUsage setting for tableName4 indexes
+        # Tweak targetUsage setting for Table4 indexes
         indexes:
           targetUsage: 0.5
 
-      tableName5:
+      Table5:
         indexes:
           # Do not autoscale index 'foo'
           foo: false
 
-      tableName6:
+      Table6:
         indexes:
           # Do not autoscale any indexes but 'foo' and 'bar'
           "*": false
@@ -85,8 +97,8 @@ custom:
       # Disable autoscaling for all
       "*": false
 
-      # but enable for tableName1
-      tableName1: true
+      # but enable for Table1
+      Table1: true
 ```
 
 ##### Configurable settings:
