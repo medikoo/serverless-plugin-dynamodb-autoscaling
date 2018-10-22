@@ -24,8 +24,7 @@
     "eslint": "^5.7",
     "eslint-config-medikoo": "^1.43",
     "istanbul": "^0.4.5",
-    "tape": "^4.9.1",
-    "tape-index": "2"
+    "tape": "^4.9.1"
   },
   "peerDependencies": {
     "serverless": "1"
