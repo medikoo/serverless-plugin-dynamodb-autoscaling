@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v3.0.0...v3.1.0) (2019-01-22)
+
+
+### Features
+
+* make ScaleInCooldown and ScaleOutCooldown configurable ([fd3e365](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/commit/fd3e365))
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v2.2.0...v3.0.0) (2018-10-22)
 
