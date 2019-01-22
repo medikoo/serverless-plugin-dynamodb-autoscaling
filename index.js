@@ -14,7 +14,13 @@ const compact       = require("es5-ext/array/#/compact")
     , lazy          = require("d/lazy")
     , minimatch     = require("minimatch");
 
-const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75, scaleInCooldown: 60, scaleOutCooldown: 60 }
+const dimensionDefaults = {
+		minCapacity: 5,
+		maxCapacity: 200,
+		targetUsage: 0.75,
+		scaleInCooldown: 60,
+		scaleOutCooldown: 60
+	}
     , entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
     , indexesDefaults = { "*": entityDefaults }
     , tableDefaults = { table: entityDefaults, indexes: indexesDefaults };
@@ -198,11 +204,11 @@ class ServerlessPluginDynamodbAutoscaling {
 		});
 		if (!dynamodbStatement) {
 			statements.push(
-				dynamodbStatement = {
+				(dynamodbStatement = {
 					Effect: "Allow",
 					Action: ["dynamodb:DescribeTable", "dynamodb:UpdateTable"],
 					Resource: "arn:aws:dynamodb:*"
-				}
+				})
 			);
 		}
 	}
@@ -213,7 +219,7 @@ class ServerlessPluginDynamodbAutoscaling {
 		);
 		if (!cloudwatchStatement) {
 			statements.push(
-				cloudwatchStatement = { Effect: "Allow", Action: ["cloudwatch:*"], Resource: "*" }
+				(cloudwatchStatement = { Effect: "Allow", Action: ["cloudwatch:*"], Resource: "*" })
 			);
 		}
 	}
@@ -275,9 +281,7 @@ Object.defineProperties(
 						objToArray(
 							resolvedPluginConfig,
 							(config, pattern) =>
-								minimatch(resourceName, pattern)
-									? copyDeep(config)
-									: null
+								minimatch(resourceName, pattern) ? copyDeep(config) : null
 						)
 					);
 					return {
