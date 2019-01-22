@@ -14,7 +14,7 @@ const compact       = require("es5-ext/array/#/compact")
     , lazy          = require("d/lazy")
     , minimatch     = require("minimatch");
 
-const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75 }
+const dimensionDefaults = { minCapacity: 5, maxCapacity: 200, targetUsage: 0.75, scaleInCooldown: 60, scaleOutCooldown: 60 }
     , entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
     , indexesDefaults = { "*": entityDefaults }
     , tableDefaults = { table: entityDefaults, indexes: indexesDefaults };
@@ -93,7 +93,9 @@ class ServerlessPluginDynamodbAutoscaling {
 		return {
 			minCapacity: config.minCapacity || dimensionDefaults.minCapacity,
 			maxCapacity: config.maxCapacity || dimensionDefaults.maxCapacity,
-			targetUsage: config.targetUsage || dimensionDefaults.targetUsage
+			targetUsage: config.targetUsage || dimensionDefaults.targetUsage,
+			scaleInCooldown: config.scaleInCooldown || dimensionDefaults.scaleInCooldown,
+			scaleOutCooldown: config.scaleOutCooldown || dimensionDefaults.scaleOutCooldown
 		};
 	}
 
@@ -171,8 +173,8 @@ class ServerlessPluginDynamodbAutoscaling {
 					ScalingTargetId: { Ref: targetResourceName },
 					TargetTrackingScalingPolicyConfiguration: {
 						TargetValue: config.targetUsage * 100,
-						ScaleInCooldown: 60,
-						ScaleOutCooldown: 60,
+						ScaleInCooldown: config.scaleInCooldown,
+						ScaleOutCooldown: config.scaleOutCooldown,
 						PredefinedMetricSpecification: {
 							PredefinedMetricType: `DynamoDB${ modeCapitalized }CapacityUtilization`
 						}
