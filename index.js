@@ -15,13 +15,13 @@ const compact       = require("es5-ext/array/#/compact")
     , minimatch     = require("minimatch");
 
 const dimensionDefaults = {
-		minCapacity: 5,
-		maxCapacity: 200,
-		targetUsage: 0.75,
-		scaleInCooldown: 60,
-		scaleOutCooldown: 60
-	}
-    , entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
+	minCapacity: 5,
+	maxCapacity: 200,
+	targetUsage: 0.75,
+	scaleInCooldown: 60,
+	scaleOutCooldown: 60
+};
+const entityDefaults = { read: dimensionDefaults, write: dimensionDefaults }
     , indexesDefaults = { "*": entityDefaults }
     , tableDefaults = { table: entityDefaults, indexes: indexesDefaults };
 
