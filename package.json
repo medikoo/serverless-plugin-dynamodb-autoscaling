@@ -24,12 +24,27 @@
 		"eslint": "^5.16.0",
 		"eslint-config-medikoo": "^1.44.0",
 		"git-list-updated": "^1.1.2",
+		"husky": "^2.2.0",
 		"istanbul": "^0.4.5",
+		"lint-staged": "^8.1.6",
 		"prettier-elastic": "^1.17.0",
 		"tape": "^4.10.1"
 	},
 	"peerDependencies": {
 		"serverless": "1"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint"
+		],
+		"*.{css,html,js,json,md,yaml,yml}": [
+			"prettier -c"
+		]
 	},
 	"eslintConfig": {
 		"extends": "medikoo",
