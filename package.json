@@ -23,6 +23,7 @@
 		"d": "^1.0.0",
 		"eslint": "^5.16.0",
 		"eslint-config-medikoo": "^1.44.0",
+		"git-list-updated": "^1.1.2",
 		"istanbul": "^0.4.5",
 		"prettier-elastic": "^1.17.0",
 		"tape": "^4.10.1"
@@ -56,6 +57,8 @@
 		"coverage": "istanbul cover test/index.js",
 		"check-coverage": "npm run coverage && istanbul check-coverage --statements 100 --function 100 --branches 100 --lines 100",
 		"lint": "eslint --ignore-path=.gitignore .",
+		"lint-updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",
+		"prettier-check-updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
 		"prettify": "prettier --write --ignore-path .gitignore '**/*.{css,html,js,json,md,yaml,yml}'",
 		"test": "node test/index.js"
 	},
