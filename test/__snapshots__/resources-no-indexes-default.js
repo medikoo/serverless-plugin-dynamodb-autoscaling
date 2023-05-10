@@ -6,20 +6,8 @@ module.exports = {
 		Properties: {
 			MaxCapacity: 200,
 			MinCapacity: 5,
-			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "EnterpriseBookings"
-						}
-					]
-				]
-			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			ResourceId: { "Fn::Join": ["/", ["table", { Ref: "EnterpriseBookings" }]] },
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:table:ReadCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -30,9 +18,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "ReadAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "EnterpriseBookingsReadScalableTarget"
-			},
+			ScalingTargetId: { Ref: "EnterpriseBookingsReadScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,
@@ -48,20 +34,8 @@ module.exports = {
 		Properties: {
 			MaxCapacity: 200,
 			MinCapacity: 5,
-			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "EnterpriseBookings"
-						}
-					]
-				]
-			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			ResourceId: { "Fn::Join": ["/", ["table", { Ref: "EnterpriseBookings" }]] },
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:table:WriteCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -72,9 +46,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "WriteAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "EnterpriseBookingsWriteScalableTarget"
-			},
+			ScalingTargetId: { Ref: "EnterpriseBookingsWriteScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,

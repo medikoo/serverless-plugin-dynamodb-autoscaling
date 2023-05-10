@@ -278,10 +278,8 @@ Object.defineProperties(
 					const resource = this.resources[resourceName];
 					if (resource.Type !== "AWS::DynamoDB::Table") return null;
 					const configList = compact.call(
-						objToArray(
-							resolvedPluginConfig,
-							(config, pattern) =>
-								minimatch(resourceName, pattern) ? copyDeep(config) : null
+						objToArray(resolvedPluginConfig, (config, pattern) =>
+							minimatch(resourceName, pattern) ? copyDeep(config) : null
 						)
 					);
 					return {

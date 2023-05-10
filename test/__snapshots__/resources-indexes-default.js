@@ -6,20 +6,8 @@ module.exports = {
 		Properties: {
 			MaxCapacity: 200,
 			MinCapacity: 5,
-			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "NextbikeCustomers"
-						}
-					]
-				]
-			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			ResourceId: { "Fn::Join": ["/", ["table", { Ref: "NextbikeCustomers" }]] },
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:table:ReadCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -30,9 +18,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "ReadAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "NextbikeCustomersReadScalableTarget"
-			},
+			ScalingTargetId: { Ref: "NextbikeCustomersReadScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,
@@ -48,20 +34,8 @@ module.exports = {
 		Properties: {
 			MaxCapacity: 200,
 			MinCapacity: 5,
-			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "NextbikeCustomers"
-						}
-					]
-				]
-			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			ResourceId: { "Fn::Join": ["/", ["table", { Ref: "NextbikeCustomers" }]] },
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:table:WriteCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -72,9 +46,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "WriteAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "NextbikeCustomersWriteScalableTarget"
-			},
+			ScalingTargetId: { Ref: "NextbikeCustomersWriteScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,
@@ -91,21 +63,9 @@ module.exports = {
 			MaxCapacity: 200,
 			MinCapacity: 5,
 			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "NextbikeCustomers"
-						},
-						"index",
-						"loginkey"
-					]
-				]
+				"Fn::Join": ["/", ["table", { Ref: "NextbikeCustomers" }, "index", "loginkey"]]
 			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:index:ReadCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -116,9 +76,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "ReadAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "NextbikeCustomersLoginkeyReadScalableTarget"
-			},
+			ScalingTargetId: { Ref: "NextbikeCustomersLoginkeyReadScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,
@@ -135,21 +93,9 @@ module.exports = {
 			MaxCapacity: 200,
 			MinCapacity: 5,
 			ResourceId: {
-				"Fn::Join": [
-					"/",
-					[
-						"table",
-						{
-							Ref: "NextbikeCustomers"
-						},
-						"index",
-						"loginkey"
-					]
-				]
+				"Fn::Join": ["/", ["table", { Ref: "NextbikeCustomers" }, "index", "loginkey"]]
 			},
-			RoleARN: {
-				"Fn::GetAtt": "DynamodbAutoscalingRole.Arn"
-			},
+			RoleARN: { "Fn::GetAtt": "DynamodbAutoscalingRole.Arn" },
 			ScalableDimension: "dynamodb:index:WriteCapacityUnits",
 			ServiceNamespace: "dynamodb"
 		}
@@ -160,9 +106,7 @@ module.exports = {
 		Properties: {
 			PolicyName: "WriteAutoScalingPolicy",
 			PolicyType: "TargetTrackingScaling",
-			ScalingTargetId: {
-				Ref: "NextbikeCustomersLoginkeyWriteScalableTarget"
-			},
+			ScalingTargetId: { Ref: "NextbikeCustomersLoginkeyWriteScalableTarget" },
 			TargetTrackingScalingPolicyConfiguration: {
 				TargetValue: 75,
 				ScaleInCooldown: 60,
