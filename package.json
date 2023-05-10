@@ -28,7 +28,7 @@
 		"istanbul": "^0.4.5",
 		"lint-staged": "^13.2.2",
 		"prettier-elastic": "^2.2.1",
-		"tape": "^4.16.2"
+		"tape": "^5.6.3"
 	},
 	"peerDependencies": {
 		"serverless": "1"
