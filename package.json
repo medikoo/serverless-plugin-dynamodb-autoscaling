@@ -21,8 +21,8 @@
 	},
 	"devDependencies": {
 		"d": "^1.0.1",
-		"eslint": "^5.16.0",
-		"eslint-config-medikoo": "^2.7.0",
+		"eslint": "^8.40.0",
+		"eslint-config-medikoo": "^4.2.0",
 		"git-list-updated": "^1.2.1",
 		"husky": "^2.7.0",
 		"istanbul": "^0.4.5",
@@ -47,11 +47,8 @@
 		]
 	},
 	"eslintConfig": {
-		"extends": "medikoo",
+		"extends": "medikoo/node/6",
 		"root": true,
-		"env": {
-			"node": true
-		},
 		"rules": {
 			"max-lines": "off"
 		}
