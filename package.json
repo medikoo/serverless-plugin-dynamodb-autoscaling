@@ -22,8 +22,8 @@
 		"eslint-config-medikoo": "^4.2.0",
 		"git-list-updated": "^1.2.1",
 		"husky": "^4.3.8",
-		"istanbul": "^0.4.5",
 		"lint-staged": "^13.2.2",
+		"nyc": "^15.1.0",
 		"prettier-elastic": "^2.2.1",
 		"tape": "^5.6.3"
 	},
@@ -65,9 +65,22 @@
 			}
 		]
 	},
+	"nyc": {
+		"all": true,
+		"exclude": [
+			".github",
+			"coverage/**",
+			"test/**",
+			"*.config.js"
+		],
+		"reporter": [
+			"lcov",
+			"html",
+			"text-summary"
+		]
+	},
 	"scripts": {
-		"coverage": "istanbul cover test/index.js",
-		"check-coverage": "npm run coverage && istanbul check-coverage --statements 100 --function 100 --branches 100 --lines 100",
+		"coverage": "nyc npm test",
 		"lint": "eslint --ignore-path=.gitignore .",
 		"lint-updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",
 		"prettier-check-updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
