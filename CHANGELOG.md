@@ -1,6 +1,12 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [3.1.1](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/compare/v3.1.0...v3.1.1) (2023-05-10)
+
+### Maintenance Improvements
+
+- Confirm compatibitlity with versions v2 and v3 of the Framework ([644a952](https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/commit/644a95267136c5fec73c42c223b699a04d25550b))
 
 <a name="3.1.0"></a>
 
