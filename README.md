@@ -1,7 +1,5 @@
-[![*nix build status][nix-build-image]][nix-build-url]
-[![Windows build status][win-build-image]][win-build-url]
+[![Build status][build-image]][build-url]
 [![Tests coverage][cov-image]][cov-url]
-![Transpilation status][transpilation-image]
 [![npm version][npm-image]][npm-url]
 
 # serverless-plugin-dynamodb-autoscaling
@@ -162,12 +160,9 @@ custom:
 npm test
 ```
 
-[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/serverless-plugin-dynamodb-autoscaling/branches/master/shields_badge.svg
-[nix-build-url]: https://semaphoreci.com/medikoo-org/serverless-plugin-dynamodb-autoscaling
-[win-build-image]: https://ci.appveyor.com/api/projects/status/nn6s7mu5f9e14h6o?svg=true
-[win-build-url]: https://ci.appveyor.com/project/medikoo/serverless-plugin-dynamodb-autoscaling
+[build-image]: https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/workflows/Integrate/badge.svg
+[build-url]: https://github.com/medikoo/serverless-plugin-dynamodb-autoscaling/actions?query=workflow%3AIntegrate
 [cov-image]: https://img.shields.io/codecov/c/github/medikoo/serverless-plugin-dynamodb-autoscaling.svg
 [cov-url]: https://codecov.io/gh/medikoo/serverless-plugin-dynamodb-autoscaling
-[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
 [npm-image]: https://img.shields.io/npm/v/serverless-plugin-dynamodb-autoscaling.svg
 [npm-url]: https://www.npmjs.com/package/serverless-plugin-dynamodb-autoscaling
