@@ -11,10 +11,7 @@
 		"dynamodb",
 		"autoscaling"
 	],
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/medikoo/serverless-plugin-dynamodb-autoscaling.git"
-	},
+	"repository": "medikoo/serverless-plugin-dynamodb-autoscaling",
 	"dependencies": {
 		"es5-ext": "^0.10.62",
 		"minimatch": "^3.1.2"
