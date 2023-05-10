@@ -28,7 +28,7 @@
 		"tape": "^5.6.3"
 	},
 	"peerDependencies": {
-		"serverless": "1"
+		"serverless": "1 || 2 || 3"
 	},
 	"husky": {
 		"hooks": {
